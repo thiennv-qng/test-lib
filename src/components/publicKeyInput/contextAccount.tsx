@@ -7,9 +7,8 @@ import { useParser } from '../../providers/parser.provider'
 import Typography from 'components/typography'
 
 const ContextAccount = ({ onClick }: { onClick: (val: string) => void }) => {
-  const {
-    parser: { accountsMeta },
-  } = useParser()
+  const { parser } = useParser()
+  const { accountsMeta } = parser || {}
 
   return (
     <div>

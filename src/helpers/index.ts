@@ -1,7 +1,9 @@
-import { Idl, AnchorProvider, web3 } from '@project-serum/anchor'
+// Add new
+import { Idl, AnchorProvider, web3, BN } from '@project-serum/anchor'
+import { IdlInstruction } from '@project-serum/anchor/dist/cjs/idl'
 import NodeWallet from '@project-serum/anchor/dist/cjs/nodewallet'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { AccountsMeta } from 'providers/parser.provider'
+import { AccountsMeta, ArgsMetaState } from 'providers/parser.provider'
 
 export const fileToBase64 = (
   file: File,
@@ -55,4 +57,66 @@ export const convertStringDataToPubKey = (
     nextDataPubKey[key] = new web3.PublicKey(dataKey)
   }
   return nextDataPubKey
+}
+
+// Add new
+export const normalizeAnchorArgs = (
+  data: ArgsMetaState,
+  instructionIdl: IdlInstruction,
+) => {
+  const normalizedArgs = Object.values(data).map((value, idx) => {
+    let paramType = IdlParser.getTypeOfParam(instructionIdl?.args[idx].type)
+    switch (paramType) {
+      case 'bool':
+        return Boolean(value)
+      case 'u64':
+      case 'u128':
+      case 'i64':
+      case 'i128':
+        return new BN(value)
+      case 'u8':
+      case 'u16':
+      case 'u32':
+      case 'i8':
+      case 'i16':
+      case 'i32':
+      case 'f32':
+      case 'f64':
+        return Number(value)
+      case 'bool []':
+        const separatedBoolean = value.split(',').map((value) => Boolean(value))
+        return separatedBoolean
+      case 'u64 []':
+      case 'u128 []':
+      case 'i64 []':
+      case 'i128 []':
+        const separatedBN = value.split(',').map((value) => new BN(value))
+        return separatedBN
+      case 'u8 []':
+      case 'u16 []':
+      case 'u32 []':
+      case 'i8 []':
+      case 'i16 []':
+      case 'i32 []':
+      case 'f32 []':
+      case 'f64 []':
+        const separatedNumber = value.split(',').map((value) => Number(value))
+        return separatedNumber
+      case 'Option<T>':
+        return value
+      case 'Enum':
+        return value
+      case 'Struct':
+        return value
+      case '[T; N]':
+      case 'Vec<T>':
+        const separatedValues = value.split(',')
+        return separatedValues
+      case 'String':
+        return String(value)
+      default:
+        return value
+    }
+  })
+  return normalizedArgs
 }

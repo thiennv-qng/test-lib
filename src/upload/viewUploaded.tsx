@@ -6,10 +6,8 @@ import UploadFIle from './uploadFile'
 import { useParser } from '../providers/parser.provider'
 
 const ViewUploaded = () => {
-  const {
-    parser: { idl, programAddress },
-    removeIdl,
-  } = useParser()
+  const { parser, removeIdl } = useParser()
+  const { idl, programAddress } = parser || {}
 
   const remove = () => {
     removeIdl()
@@ -21,7 +19,7 @@ const ViewUploaded = () => {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex flex-nowrap justify-between gap-[6px] border border-solid rounded-[8px] px-[16px] py-[10px]  text-[16px]">
+      <div className="flex flex-nowrap justify-between gap-[6px] border border-solid border-[#B3B3B3] rounded-[8px] px-[16px] py-[10px] bg-[#0000000d] text-[16px]">
         <div className="w-[24px]">
           <IonIcon name="document-attach-outline" />
         </div>

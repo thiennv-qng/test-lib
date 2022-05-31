@@ -1,16 +1,15 @@
 import { useState } from 'react'
-
-import Empty from '../components/empty'
-import ParamInput from '../components/paramInput'
+import { PublicKeyInput, ParamInput, Empty, Segmented } from '../components'
 import { useParser } from '../providers/parser.provider'
-import PublicKeyInput from '../components/publicKeyInput'
-import Segmented from 'components/segmented'
+
+enum Tabs {
+  Accounts = 'accounts',
+  Arguments = 'arguments',
+}
 
 export const InstructorAccounts = () => {
-  const {
-    parser: { accountsMeta, instructionIdl },
-    setAccountsMeta,
-  } = useParser()
+  const { parser, setAccountsMeta } = useParser()
+  const { accountsMeta, instructionIdl } = parser || {}
 
   if (!instructionIdl?.accounts.length) return <Empty />
   return (
@@ -30,10 +29,9 @@ export const InstructorAccounts = () => {
 }
 
 export const InstructorArguments = () => {
-  const {
-    parser: { instructionIdl, argsMeta },
-    setArgsMeta,
-  } = useParser()
+  const { parser, setArgsMeta } = useParser()
+  const { instructionIdl, argsMeta } = parser || {}
+
   if (!instructionIdl?.args.length) return <Empty />
 
   return (
@@ -50,20 +48,11 @@ export const InstructorArguments = () => {
     </div>
   )
 }
-type InstrucSegmentedType = 'accounts' | 'arguments'
-
-const INSTRUCTIONS = {
-  accounts: <InstructorAccounts />,
-  arguments: <InstructorArguments />,
-}
-
-const TAB_INSTRUCS = ['accounts', 'arguments']
 
 const InstructionView = () => {
   const [selected, setSelected] = useState('accounts')
-  const {
-    parser: { idl },
-  } = useParser()
+  const { parser } = useParser()
+  const { idl } = parser || {}
 
   if (!idl) return <Empty />
   return (
@@ -71,11 +60,14 @@ const InstructionView = () => {
       <div>
         <Segmented
           value={selected}
-          options={TAB_INSTRUCS}
+          options={[Tabs.Accounts, Tabs.Arguments]}
           onChange={setSelected}
         />
       </div>
-      <div>{INSTRUCTIONS[selected as InstrucSegmentedType]}</div>
+      <div>
+        {selected === Tabs.Accounts && <InstructorAccounts />}
+        {selected === Tabs.Arguments && <InstructorArguments />}
+      </div>
     </div>
   )
 }

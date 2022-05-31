@@ -18,10 +18,8 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
   const [accountsViewer, setAccountsViewer] = useState<
     Record<string, string[]>
   >({})
-  const {
-    parser: { idl, programAddress },
-    connection,
-  } = useParser()
+  const { parser, connection } = useParser()
+  const { idl, programAddress } = parser || {}
 
   const getProgram = useCallback(() => {
     if (!idl || !programAddress || !connection) return
@@ -86,6 +84,7 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
           <Input
             value={address}
             onValue={setAddress}
+            bordered={false}
             preffix={loading ? <Spinner /> : <IonIcon name="search-outline" />}
             className="flex-auto stroke-slate-500"
           />
@@ -119,6 +118,7 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
                         className="flex-auto"
                         value={val}
                         onValue={() => {}}
+                        bordered={false}
                       />
                       <Button onClick={() => onChange(val)}>Select</Button>
                     </div>

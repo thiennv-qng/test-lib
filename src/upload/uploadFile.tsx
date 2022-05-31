@@ -7,10 +7,8 @@ import Typography from '../components/typography'
 import { useParser } from '../providers/parser.provider'
 
 const UploadFIle = () => {
-  const {
-    uploadIdl,
-    parser: { idl },
-  } = useParser()
+  const { uploadIdl, parser } = useParser()
+  const { idl } = parser || {}
 
   const upload = (file: FileList | null) => {
     if (!file) return
@@ -31,7 +29,7 @@ const UploadFIle = () => {
   if (!!idl) return <Fragment />
 
   return (
-    <div className="relative border border-dashed rounded-[8px] p-[24px]">
+    <div className="relative border border-dashed border-[#B3B3B3] rounded-[8px] p-[24px] bg-[#0000000d]">
       <label>
         <input
           type="file"
@@ -44,7 +42,7 @@ const UploadFIle = () => {
             <IonIcon name="cloud-upload-outline" />
           </div>
           <Typography>Upload</Typography>
-          <Typography>Support JSON</Typography>
+          <Typography secondary>Support JSON</Typography>
         </div>
       </label>
     </div>

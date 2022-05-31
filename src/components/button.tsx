@@ -58,7 +58,9 @@ const Button = ({
 
   return (
     <button
-      className="sntr-btn"
+      className={`flex flex-row justify-center align-middle gap-2 py-2 px-4 rounded-[4px] font-medium border border-[#B3B3B3] ${
+        type === 'primary' ? 'bg-[#1866E1] !text-white border-none' : ''
+      }`}
       onClick={(e) => onClick(e)}
       style={btnStyle}
       disabled={disabledBtn}

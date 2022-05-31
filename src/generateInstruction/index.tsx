@@ -12,6 +12,7 @@ import {
 } from 'helpers'
 
 import { useParser } from 'providers/parser.provider'
+import ViewTxInstructions from './viewTxInstructions'
 
 type GenerateInstructionProps = { thien?: string }
 const GenerateInstruction = ({ thien }: GenerateInstructionProps) => {
@@ -79,10 +80,11 @@ const GenerateInstruction = ({ thien }: GenerateInstructionProps) => {
   console.log(txInstructions, 'txInstructions')
 
   return (
-    <div>
-      <Button onClick={onInit} block loading={loading}>
+    <div className="grid grid-cols-1 gap-4">
+      <Button onClick={onInit} block loading={loading} type="primary">
         Generate Instruction
       </Button>
+      <ViewTxInstructions />
     </div>
   )
 }

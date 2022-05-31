@@ -54,12 +54,13 @@ const Button = ({
 }: ButtonProps) => {
   const disabledBtn = loading || disabled
   const width = block ? { width: '100%' } : {}
-  const btnColor = type !== 'text' ? { color: '#fff' } : {}
-  const btnStyle = { ...BUTTON_TYPE[type], ...width, ...btnColor, ...style }
+  const btnStyle = { ...BUTTON_TYPE[type], ...width, ...style }
 
   return (
     <button
-      className="flex flex-row justify-center align-middle gap-2 py-2 px-4 bg-[#1866E1] rounded-[4px] font-medium"
+      className={`flex flex-row justify-center align-middle gap-2 py-2 px-4 rounded-[4px] font-medium border border-[#473C31] ${
+        type === 'primary' ? 'bg-[#1866E1] text-white border-none' : ''
+      }`}
       onClick={(e) => onClick(e)}
       style={btnStyle}
       disabled={disabledBtn}

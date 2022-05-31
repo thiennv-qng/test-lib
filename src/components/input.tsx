@@ -9,6 +9,7 @@ type InputProps = {
   style?: CSSProperties
   bodyStyle?: CSSProperties
   className?: string
+  placeholder?: string
 } & InputHTMLAttributes<Element>
 
 const Input = ({
@@ -20,11 +21,13 @@ const Input = ({
   bodyStyle,
   onValue,
   className = '',
+  placeholder = '',
 }: InputProps) => {
   const clnBorder = bordered
-    ? 'border border-inherit rounded-[8px] py-[6px] px-[14px]'
-    : 'border-none'
-  const cln = 'flex flex-nowrap justify-between gap-2'
+    ? 'border border-inherit'
+    : 'border-none bg-[#E0E0E0]'
+  const cln =
+    'flex flex-nowrap justify-between gap-2 rounded-[4px] py-[6px] px-[14px]'
 
   return (
     <div className={`${cln} ${className} ${clnBorder}`} style={{ ...style }}>
@@ -34,6 +37,7 @@ const Input = ({
         style={{
           ...bodyStyle,
         }}
+        placeholder={placeholder}
         value={value}
         onChange={(e) => onValue(e.target.value)}
       />

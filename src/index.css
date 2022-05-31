@@ -33,19 +33,7 @@
     stroke-dashoffset: -124;
   }
 }
-/* Button */
-.sntr-btn {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 16px;
-  border: 1px;
-  border-color: inherit;
-  background: inherit;
-  cursor: pointer;
-}
+
 *:disabled {
   opacity: 0.5;
 }

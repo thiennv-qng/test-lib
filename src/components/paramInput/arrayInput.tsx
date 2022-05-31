@@ -32,13 +32,16 @@ const ArrayInput = ({
 
   return (
     <div className="flex flex-col gap-6">
-      <Button onClick={() => onAdd()}>Add</Button>
+      <Button type="dashed" onClick={() => onAdd()}>
+        Add
+      </Button>
 
       {values.map((val, idx) => {
+        const name = `Seed ${String(idx + 1)}`
         return (
           <ParamInput
             idlType={idlType}
-            name={String(idx)}
+            name={name}
             value={val}
             onChange={(data) => onChangeValues(idx, data)}
             key={idx}

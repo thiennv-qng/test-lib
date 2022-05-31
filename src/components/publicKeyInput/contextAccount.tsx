@@ -23,7 +23,12 @@ const ContextAccount = ({ onClick }: { onClick: (val: string) => void }) => {
               <div className="grid grid-cols-1 gap-1" key={idx}>
                 <Typography secondary>{key}</Typography>
                 <div className="flex flex-row gap-4">
-                  <Input className="flex-auto" value={val} onValue={() => {}} />
+                  <Input
+                    className="flex-auto"
+                    value={val}
+                    onValue={() => {}}
+                    bordered={false}
+                  />
                   <Button onClick={() => onClick(val)}>Select</Button>
                 </div>
               </div>

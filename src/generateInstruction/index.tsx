@@ -4,7 +4,13 @@ import { PublicKey } from '@solana/web3.js'
 
 import Button from 'components/button'
 
-import { convertStringDataToPubKey, getAnchorProvider } from 'helpers'
+// Add New
+import {
+  convertStringDataToPubKey,
+  getAnchorProvider,
+  normalizeAnchorArgs,
+} from 'helpers'
+
 import { useParser } from 'providers/parser.provider'
 import ViewTxInstructions from './viewTxInstructions'
 
@@ -37,24 +43,31 @@ const GenerateInstruction = ({ thien }: GenerateInstructionProps) => {
     [getProgram, instructionSelected],
   )
 
+  // Add new
   const initInstruction = useCallback(
     async (data: Record<string, PublicKey>) => {
       const program = getProgram()
-      if (!program || !instructionSelected) return
-      return await program.methods[instructionSelected](argsMeta).accounts(data)
+      if (!program || !instructionSelected || !instructionIdl) return
+      const nomalizedArgsMeta = normalizeAnchorArgs(argsMeta, instructionIdl)
+      return await program.methods[instructionSelected](
+        ...nomalizedArgsMeta,
+      ).accounts(data)
     },
-    [argsMeta, getProgram, instructionSelected],
+    [argsMeta, getProgram, instructionIdl, instructionSelected],
   )
 
+  //Add new
   const onInit = async () => {
     try {
       setLoading(true)
       const accountsMetaPubkey = convertStringDataToPubKey(accountsMeta)
 
       let instruction = undefined
-      if (!!instructionIdl?.args.length)
+      if (!!instructionIdl?.args.length) {
         instruction = await initInstruction(accountsMetaPubkey)
-      instruction = await initInstructionNonArgs(accountsMetaPubkey)
+      } else {
+        instruction = await initInstructionNonArgs(accountsMetaPubkey)
+      }
       const data = await instruction?.instruction()
       if (!data) return setTxInstructions()
       return setTxInstructions({ name: instructionSelected || '', data })

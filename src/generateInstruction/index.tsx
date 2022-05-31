@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { Program } from '@project-serum/anchor'
 import { PublicKey } from '@solana/web3.js'
 
-import Button from 'button'
+import Button from 'components/button'
 
 import { convertStringDataToPubKey, getAnchorProvider } from 'helpers'
 import { useParser } from 'providers/parser.provider'

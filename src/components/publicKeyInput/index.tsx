@@ -6,13 +6,13 @@ import IdlAccount from './idlAccount'
 import TokenAccount from './tokenAccount'
 import Pda from './pda'
 import Modal from '../modal'
-import Typography from '../typography'
 import Input from '../input'
 import Button from '../button'
-import Select from '../select'
 
-import { AccountsMeta } from '../providers/parser.provider'
-import { ParserSystemOptions } from '../contants'
+import { AccountsMeta } from '../../providers/parser.provider'
+import { ParserSystemOptions } from '../../constants'
+import Typography from 'components/typography'
+import Select from 'components/select'
 
 type PubicKeyInputProps = {
   name: string

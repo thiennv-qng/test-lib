@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState } from 'react'
 import { Program, web3 } from '@project-serum/anchor'
 import IonIcon from '@sentre/antd-ionicon'
 
-import Select from '../select'
 import Input from '../input'
 import Button, { Spinner } from '../button'
-import Typography from 'typography'
-import Empty from 'empty'
+import Empty from 'components/empty'
 
-import { useParser } from '../providers/parser.provider'
+import { useParser } from '../../providers/parser.provider'
 import { getAnchorProvider } from 'helpers'
+import Typography from 'components/typography'
+import Select from 'components/select'
 
 const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
   const [address, setAddress] = useState('')

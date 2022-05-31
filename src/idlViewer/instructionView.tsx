@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import Empty from './empty'
-import ParamInput from './paramInput'
-import { useParser } from './providers/parser.provider'
-import PublicKeyInput from './publicKeyInput'
-import Segmented from './segmented'
+
+import Empty from '../components/empty'
+import ParamInput from '../components/paramInput'
+import { useParser } from '../providers/parser.provider'
+import PublicKeyInput from '../components/publicKeyInput'
+import Segmented from 'components/segmented'
 
 export const InstructorAccounts = () => {
   const {
@@ -58,7 +59,7 @@ const INSTRUCTIONS = {
 
 const TAB_INSTRUCS = ['accounts', 'arguments']
 
-const InstrctionView = () => {
+const InstructionView = () => {
   const [selected, setSelected] = useState('accounts')
   const {
     parser: { idl },
@@ -79,4 +80,4 @@ const InstrctionView = () => {
   )
 }
 
-export default InstrctionView
+export default InstructionView

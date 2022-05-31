@@ -1,10 +1,10 @@
-import Typography from 'typography'
 import Button from '../button'
 
 import Empty from '../empty'
 import Input from '../input'
 
-import { useParser } from '../providers/parser.provider'
+import { useParser } from '../../providers/parser.provider'
+import Typography from 'components/typography'
 
 const ContextAccount = ({ onClick }: { onClick: (val: string) => void }) => {
   const {

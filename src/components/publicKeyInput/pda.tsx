@@ -4,8 +4,8 @@ import { account } from '@senswap/sen-js'
 
 import PubicKeyInput from './index'
 import Button from '../button'
-import Typography from '../typography'
 import { useParser } from 'providers/parser.provider'
+import Typography from 'components/typography'
 
 const Pda = ({ onChange }: { onChange: (val: string) => void }) => {
   const [seeds, setSeeds] = useState<string[]>([])

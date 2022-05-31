@@ -1,5 +1,5 @@
-import Button from './button'
-import { useParser } from './providers/parser.provider'
+import Button from '../components/button'
+import { useParser } from '../providers/parser.provider'
 
 const TemplateView = () => {
   const {

@@ -2,7 +2,7 @@ import {
   IdlTypeDefTyEnum,
   IdlTypeDefTyStruct,
 } from '@project-serum/anchor/dist/cjs/idl'
-import { useParser } from '../../providers/parser.provider'
+import { useParser } from '../../../providers/parser.provider'
 
 import EnumInput from './enumInput'
 import StructInput from './structInput'

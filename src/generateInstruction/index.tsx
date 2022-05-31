@@ -3,19 +3,16 @@ import { Program } from '@project-serum/anchor'
 import { PublicKey } from '@solana/web3.js'
 
 import Button from 'components/button'
+import ViewTxInstructions from './viewTxInstructions'
 
-// Add New
 import {
   convertStringDataToPubKey,
   getAnchorProvider,
   normalizeAnchorArgs,
 } from 'helpers'
-
 import { useParser } from 'providers/parser.provider'
-import ViewTxInstructions from './viewTxInstructions'
 
-type GenerateInstructionProps = { thien?: string }
-const GenerateInstruction = ({ thien }: GenerateInstructionProps) => {
+const GenerateInstruction = () => {
   const [loading, setLoading] = useState(false)
   const { parser, connection, setTxInstructions, txInstructions } = useParser()
   const {
@@ -43,7 +40,6 @@ const GenerateInstruction = ({ thien }: GenerateInstructionProps) => {
     [getProgram, instructionSelected],
   )
 
-  // Add new
   const initInstruction = useCallback(
     async (data: Record<string, PublicKey>) => {
       const program = getProgram()
@@ -56,7 +52,6 @@ const GenerateInstruction = ({ thien }: GenerateInstructionProps) => {
     [argsMeta, getProgram, instructionIdl, instructionSelected],
   )
 
-  //Add new
   const onInit = async () => {
     try {
       setLoading(true)

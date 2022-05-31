@@ -1,4 +1,3 @@
-// Add new
 import { Idl, AnchorProvider, web3, BN } from '@project-serum/anchor'
 import { IdlInstruction } from '@project-serum/anchor/dist/cjs/idl'
 import NodeWallet from '@project-serum/anchor/dist/cjs/nodewallet'
@@ -59,7 +58,6 @@ export const convertStringDataToPubKey = (
   return nextDataPubKey
 }
 
-// Add new
 export const normalizeAnchorArgs = (
   data: ArgsMetaState,
   instructionIdl: IdlInstruction,

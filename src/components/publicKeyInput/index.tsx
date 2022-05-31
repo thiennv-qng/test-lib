@@ -10,7 +10,7 @@ import Input from '../input'
 import Button from '../button'
 
 import { AccountsMeta } from '../../providers/parser.provider'
-import { ParserSystemOptions } from '../../constants'
+import { AddressCategory } from '../../constants'
 import Typography from 'components/typography'
 import Select from 'components/select'
 
@@ -21,6 +21,7 @@ type PubicKeyInputProps = {
   size?: number
   placeholder?: string
   bordered?: boolean
+  defaultCategory?: AddressCategory
 }
 type ModalViewProps = {
   selected: string
@@ -28,22 +29,22 @@ type ModalViewProps = {
 }
 
 export const SELECT_SYSTEM = [
-  ParserSystemOptions.context,
-  ParserSystemOptions.idl,
-  ParserSystemOptions.pda,
-  ParserSystemOptions.system,
-  ParserSystemOptions.token,
+  AddressCategory.context,
+  AddressCategory.idl,
+  AddressCategory.pda,
+  AddressCategory.system,
+  AddressCategory.token,
 ]
 
 const ModalView = ({ selected, onChange }: ModalViewProps) => {
   switch (true) {
-    case selected === ParserSystemOptions.context:
+    case selected === AddressCategory.context:
       return <ContextAccount onClick={onChange} />
-    case selected === ParserSystemOptions.idl:
+    case selected === AddressCategory.idl:
       return <IdlAccount onChange={onChange} />
-    case selected === ParserSystemOptions.system:
+    case selected === AddressCategory.system:
       return <SystemAccount onChange={onChange} />
-    case selected === ParserSystemOptions.token:
+    case selected === AddressCategory.token:
       return <TokenAccount onChange={onChange} />
     default:
       return <Pda onChange={onChange} />
@@ -55,12 +56,12 @@ const PublicKeyInput = ({
   value,
   onChange,
   placeholder = 'Input or select your types',
+  defaultCategory = AddressCategory.system,
 }: PubicKeyInputProps) => {
   const [visible, setVisible] = useState(false)
-  const [systemSelected, setSystemSelected] = useState(
-    ParserSystemOptions.system,
-  )
+  const [category, setCategory] = useState<AddressCategory>(defaultCategory)
 
+  console.log('defaultCategory', defaultCategory)
   const onChangePublicKey = (address: string) => {
     onChange({ publicKey: address, privateKey: '' })
     setVisible(false)
@@ -84,8 +85,9 @@ const PublicKeyInput = ({
         />
         <Select
           style={{ minWidth: 120 }}
-          defaultValue={ParserSystemOptions.system}
-          onValue={setSystemSelected}
+          value={category}
+          // @ts-ignore
+          onValue={setCategory}
         >
           {SELECT_SYSTEM.map((item, idx) => (
             <option
@@ -102,7 +104,7 @@ const PublicKeyInput = ({
       <Modal visible={visible} onClose={() => setVisible(false)}>
         <div className="flex flex-col gap-6">
           <Typography level={5}>{name}</Typography>
-          <ModalView selected={systemSelected} onChange={onChangePublicKey} />
+          <ModalView selected={category} onChange={onChangePublicKey} />
         </div>
       </Modal>
     </div>

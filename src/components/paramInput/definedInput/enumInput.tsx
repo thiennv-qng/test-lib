@@ -19,6 +19,7 @@ const EnumInput = ({
               className="flex-auto"
               value={variant.name}
               onValue={() => {}}
+              bordered={false}
             />
             <Button onClick={() => onChange(variant.name)}>Select</Button>
           </div>

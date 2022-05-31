@@ -15,7 +15,7 @@ const RadioButton = ({
   return (
     <label
       className={`cursor-pointer px-[16px] py-[4px] rounded-[4px] border text-center ${
-        checked ? 'border-blue-400 bg-blue-100' : ''
+        checked ? 'border-blue-400 bg-cyan-50' : ''
       }`}
     >
       <input

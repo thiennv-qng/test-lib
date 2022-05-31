@@ -101,6 +101,8 @@ const ParamInput = ({
             className="flex-auto"
             value={value}
             onValue={onChange}
+            bordered={false}
+            placeholder={placeholder}
             suffix={
               isExist && (
                 <Button type="text" onClick={() => setVisible(true)}>

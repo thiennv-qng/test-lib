@@ -18,10 +18,8 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
   const [accountsViewer, setAccountsViewer] = useState<
     Record<string, string[]>
   >({})
-  const {
-    parser: { idl, programAddress },
-    connection,
-  } = useParser()
+  const { parser, connection } = useParser()
+  const { idl, programAddress } = parser || {}
 
   const getProgram = useCallback(() => {
     if (!idl || !programAddress || !connection) return

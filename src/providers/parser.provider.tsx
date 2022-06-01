@@ -100,6 +100,7 @@ const IDLParserContextProvider = ({
       const instructionIdl = parserData.idl?.instructions?.find(
         (elm) => elm.name === instruction,
       )
+      nextData.argsMeta = {}
       nextData.instructionIdl = instructionIdl
       nextData.instructionSelected = instruction
       return setParserData({ ...nextData })

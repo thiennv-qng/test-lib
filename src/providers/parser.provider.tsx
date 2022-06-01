@@ -145,6 +145,7 @@ const IDLParserContextProvider = ({
     [txInstruct],
   )
 
+  console.log('txInstruct', txInstruct)
   const provider = useMemo(
     () => ({
       parser: parserData,

@@ -58,11 +58,9 @@ const GenerateInstruction = () => {
       const accountsMetaPubkey = convertStringDataToPubKey(accountsMeta)
 
       let instruction = undefined
-      if (!!instructionIdl?.args.length) {
+      if (!!instructionIdl?.args.length)
         instruction = await initInstruction(accountsMetaPubkey)
-      } else {
-        instruction = await initInstructionNonArgs(accountsMetaPubkey)
-      }
+      else instruction = await initInstructionNonArgs(accountsMetaPubkey)
       const data = await instruction?.instruction()
       if (!data) return setTxInstructions()
       return setTxInstructions({ name: instructionSelected || '', data })

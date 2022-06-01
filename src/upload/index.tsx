@@ -8,6 +8,7 @@ import Modal from '../components/modal'
 import { useParser } from '../providers/parser.provider'
 import InstructionView from 'idlViewer/instructionView'
 import GenerateInstruction from 'generateInstruction'
+import Button from 'components/button'
 
 const UploadIdl = () => {
   const [visible, setVisible] = useState(false)
@@ -29,12 +30,12 @@ const UploadIdl = () => {
     <div>
       <UploadFIle />
       <Modal
-        className="sm:!w-full lg:!w-[900px]"
+        className="md:!w-[95%] lg:!w-[900px]"
         visible={visible}
         onClose={onClose}
         closable={false}
       >
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-8">
           <div className="grid xs:grid-cols-1 md:grid-cols-2 gap-6 min-h-[300px]">
             <div className="flex flex-col gap-8 p-4 bg-[#EBEBEB]">
               <ViewUploaded />
@@ -45,6 +46,7 @@ const UploadIdl = () => {
           <GenerateInstruction />
         </div>
       </Modal>
+      <Button onClick={() => console.log()}>Clcik</Button>
     </div>
   )
 }

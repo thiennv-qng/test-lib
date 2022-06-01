@@ -65,6 +65,8 @@ export const normalizeAnchorArgs = (
   const normalizedArgs = Object.values(data).map((value, idx) => {
     let paramType = IdlParser.getTypeOfParam(instructionIdl?.args[idx].type)
     switch (paramType) {
+      case 'publicKey':
+        return new PublicKey(value)
       case 'bool':
         return Boolean(value)
       case 'u64':

@@ -30,8 +30,7 @@ const ViewUploaded = () => {
       </div>
       {isEmptyProgramAddr && (
         <Typography style={{ color: '#F9575E', fontSize: 12 }}>
-          The program address is undefined. Please update your IDL to use the
-          program.
+          (Warning: The program address is undefined.)
         </Typography>
       )}
     </div>

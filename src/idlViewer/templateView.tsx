@@ -14,7 +14,7 @@ const TemplateView = () => {
   }
 
   return (
-    <div className="grid gap-4 xs:grid-cols-1 md:grid-cols-2">
+    <div className="grid gap-4 xs:grid-cols-1 sm:grid-cols-2">
       {idl?.instructions.map((instruc, idx) => (
         <RadioButton
           value={instruc.name}

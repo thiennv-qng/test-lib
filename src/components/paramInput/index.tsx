@@ -11,6 +11,7 @@ import PublicKeyInput from 'components/publicKeyInput'
 
 import { useParser } from '../../providers/parser.provider'
 import { IdlParser } from 'helpers'
+import IonIcon from '@sentre/antd-ionicon'
 
 const NORMAL_TYPES = [
   'u8',
@@ -63,6 +64,8 @@ type ParamInputProps = {
   idlType: IdlType
   onChange: (val: string) => void
   placeholder?: string
+  onRemove?: () => void
+  acceptRemove?: boolean
 }
 
 const ParamInput = ({
@@ -71,6 +74,8 @@ const ParamInput = ({
   idlType,
   onChange,
   placeholder = 'Input or select your types',
+  onRemove = () => {},
+  acceptRemove = false,
 }: ParamInputProps) => {
   const [visible, setVisible] = useState(false)
 
@@ -88,6 +93,8 @@ const ParamInput = ({
           name={name}
           onChange={(acc) => onChange(acc.publicKey)}
           value={value}
+          onRemove={onRemove}
+          acceptRemove
         />
       ) : (
         <div className="grid gird-cols-1 gap-1">
@@ -97,27 +104,46 @@ const ParamInput = ({
               ({IdlParser.getTypeOfParam(idlType)})
             </Typography>
           </div>
-          <Input
-            className="flex-auto"
-            value={value}
-            onValue={onChange}
-            bordered={false}
-            placeholder={placeholder}
-            suffix={
-              isExist && (
-                <Button type="text" onClick={() => setVisible(true)}>
-                  <Typography level={5}>Init</Typography>
-                </Button>
-              )
-            }
-          />
+          <div className="flex flex-row gap-4">
+            <Input
+              className="flex-auto"
+              value={value}
+              onValue={onChange}
+              bordered={false}
+              suffix={
+                isExist && (
+                  <Button type="text" onClick={() => setVisible(true)}>
+                    <Typography level={5}>Init</Typography>
+                  </Button>
+                )
+              }
+            />
+            {acceptRemove && (
+              <Button
+                type="text"
+                onClick={onRemove}
+                suffix={<IonIcon name="trash-outline" />}
+              />
+            )}
+          </div>
         </div>
       )}
       {/* Advanced input */}
       {!NORMAL_TYPES.includes(idlType.toString()) && (
-        <Modal visible={visible} onClose={() => setVisible(false)}>
-          <div className="grid grid-cols-1 gap-1">
-            <Typography secondary style={{ textTransform: 'capitalize' }}>
+        <Modal
+          visible={visible}
+          onClose={() => setVisible(false)}
+          closeIcon={<IonIcon name="close-outline" />}
+          destroyOnClose
+        >
+          <div className="grid grid-cols-1 gap-8">
+            <Typography
+              className="!flex flex-1"
+              style={{
+                textTransform: 'capitalize',
+                fontWeight: 600,
+              }}
+            >
               {name}
             </Typography>
             <WrapInput

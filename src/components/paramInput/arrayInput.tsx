@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { IdlType } from '@project-serum/anchor/dist/cjs/idl'
 
 import Button from '../button'
@@ -19,6 +19,12 @@ const ArrayInput = ({
   const onAdd = () => {
     const newValues = [...values]
     newValues.push('')
+    setValues(newValues)
+  }
+
+  const onRemove = (index: number) => {
+    const newValues = [...values]
+    newValues.splice(index, 1)
     setValues(newValues)
   }
 
@@ -47,11 +53,17 @@ const ArrayInput = ({
             name={name}
             value={val}
             onChange={(data) => onChangeValues(idx, data)}
+            onRemove={() => onRemove(idx)}
+            acceptRemove
             key={idx}
           />
         )
       })}
-      {!!values.length && <Button onClick={() => onOk()}>Done</Button>}
+      {!!values.length && (
+        <Button type="primary" onClick={() => onOk()}>
+          Done
+        </Button>
+      )}
     </div>
   )
 }

@@ -90,7 +90,10 @@ const IDLParserContextProvider = ({
     },
     [parserData],
   )
-  const removeIdl = useCallback(() => setParserData(DEFAULT_IDL), [])
+  const removeIdl = useCallback(() => {
+    setParserData(DEFAULT_IDL)
+    setTxInstruct({})
+  }, [])
 
   const setInstruction = useCallback(
     (instruction: string | undefined) => {
@@ -146,7 +149,6 @@ const IDLParserContextProvider = ({
     [txInstruct],
   )
 
-  console.log('txInstruct', txInstruct)
   const provider = useMemo(
     () => ({
       parser: parserData,

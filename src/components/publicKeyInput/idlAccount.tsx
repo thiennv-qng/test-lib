@@ -112,8 +112,8 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
               <div className="grid gird-cols-1 gap-1" key={idx}>
                 <Typography secondary>{key}</Typography>
                 <div className="grid gird-cols-1 gap-2">
-                  {accountsViewer[key].map((val) => (
-                    <div className="flex flex-row gap-4">
+                  {accountsViewer[key].map((val, jdx) => (
+                    <div className="flex flex-row gap-4" key={jdx}>
                       <Input
                         className="flex-auto"
                         value={val}

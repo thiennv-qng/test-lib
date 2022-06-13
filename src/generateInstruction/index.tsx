@@ -73,7 +73,7 @@ const GenerateInstruction = () => {
   console.log(txInstructions, 'txInstructions')
 
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-10">
       <Button onClick={onInit} block loading={loading} type="primary">
         Generate Instruction
       </Button>

@@ -1,10 +1,10 @@
-import { Fragment } from 'react'
 import { Idl } from '@project-serum/anchor'
 import IonIcon from '@sentre/antd-ionicon'
 
 import Typography from '../components/typography'
 
 import { useParser } from '../providers/parser.provider'
+import ViewUploaded from './viewUploaded'
 
 const UploadFIle = () => {
   const { uploadIdl, parser } = useParser()
@@ -26,7 +26,7 @@ const UploadFIle = () => {
     }
   }
 
-  if (!!idl) return <Fragment />
+  if (!!idl) return <ViewUploaded />
 
   return (
     <div className="relative border border-dashed border-[#B3B3B3] rounded-[8px] p-[24px] bg-[#0000000d]">

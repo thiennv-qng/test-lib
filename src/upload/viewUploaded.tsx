@@ -5,7 +5,8 @@ import UploadFIle from './uploadFile'
 
 import { useParser } from '../providers/parser.provider'
 
-const ViewUploaded = () => {
+type ViewUploadedProps = { onClick?: () => void }
+const ViewUploaded = ({ onClick = () => {} }: ViewUploadedProps) => {
   const { parser, removeIdl } = useParser()
   const { idl, programAddress } = parser || {}
 

@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { IdlType } from '@project-serum/anchor/dist/cjs/idl'
 
 import Button from '../button'

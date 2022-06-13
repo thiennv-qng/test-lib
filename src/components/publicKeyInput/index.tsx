@@ -79,7 +79,7 @@ const PublicKeyInput = ({
         <Input
           className="flex-auto"
           value={value}
-          placeholder=""
+          placeholder={placeholder}
           onValue={onChangePublicKey}
           bordered={false}
           suffix={

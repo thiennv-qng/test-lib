@@ -113,7 +113,11 @@ export const normalizeAnchorArgs = (
         const separatedValues = value.split(',')
         return separatedValues
       case 'String':
-        return String(value)
+        const pubKey = value.split(',').map((value) => new PublicKey(value))
+        return pubKey
+      case 'MintActionState []':
+        const actions = value.split(',').map((value) => value)
+        return actions
       default:
         return value
     }

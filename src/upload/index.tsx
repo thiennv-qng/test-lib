@@ -38,7 +38,7 @@ const UploadIdl = () => {
         className="md:!w-[95%] lg:!w-[900px]"
         visible={visible}
         onClose={() => setVisible(false)}
-        closable={false}
+        closeIcon={<IonIcon name="contract-outline" />}
       >
         <div className="grid grid-cols-1 gap-8">
           <div className="grid xs:grid-cols-1 md:grid-cols-2 gap-6 min-h-[300px]">

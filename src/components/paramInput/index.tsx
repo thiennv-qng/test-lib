@@ -110,6 +110,7 @@ const ParamInput = ({
               value={value}
               onValue={onChange}
               bordered={false}
+              placeholder={placeholder}
               suffix={
                 isExist && (
                   <Button type="text" onClick={() => setVisible(true)}>
@@ -134,7 +135,6 @@ const ParamInput = ({
           visible={visible}
           onClose={() => setVisible(false)}
           closeIcon={<IonIcon name="close-outline" />}
-          destroyOnClose
         >
           <div className="grid grid-cols-1 gap-8">
             <Typography

@@ -61,7 +61,6 @@ const PublicKeyInput = ({
   const [visible, setVisible] = useState(false)
   const [category, setCategory] = useState<AddressCategory>(defaultCategory)
 
-  console.log('defaultCategory', defaultCategory)
   const onChangePublicKey = (address: string) => {
     onChange({ publicKey: address, privateKey: '' })
     setVisible(false)

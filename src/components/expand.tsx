@@ -13,8 +13,8 @@ type ExpandProps = {
 const Expand = ({
   header,
   children,
-  arrowIcon = <IonIcon name="chevron-down-outline" className="text-white" />,
-  expandIcon = <IonIcon name="chevron-up-outline" className="text-white" />,
+  arrowIcon = <IonIcon name="chevron-down-outline" className="!text-white" />,
+  expandIcon = <IonIcon name="chevron-up-outline" className="!text-white" />,
   headerStyle,
 }: ExpandProps) => {
   const [visible, setVisible] = useState(false)

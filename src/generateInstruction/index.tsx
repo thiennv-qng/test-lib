@@ -14,7 +14,7 @@ import { useParser } from 'providers/parser.provider'
 
 const GenerateInstruction = () => {
   const [loading, setLoading] = useState(false)
-  const { parser, connection, setTxInstructions, txInstructions } = useParser()
+  const { parser, connection, setTxInstructions } = useParser()
   const {
     idl,
     programAddress,
@@ -70,7 +70,6 @@ const GenerateInstruction = () => {
       setLoading(false)
     }
   }
-  console.log(txInstructions, 'txInstructions')
 
   return (
     <div className="grid grid-cols-1 gap-10">

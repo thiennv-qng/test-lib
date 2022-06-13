@@ -4,13 +4,16 @@ import { IdlType } from '@project-serum/anchor/dist/cjs/idl'
 import Button from '../button'
 import ParamInput from './index'
 
+type ArrayInputProps = {
+  idlType: IdlType
+  onChange: (val: string) => void
+  inputName?: string
+}
 const ArrayInput = ({
   idlType,
   onChange,
-}: {
-  idlType: IdlType
-  onChange: (val: string) => void
-}) => {
+  inputName = 'Seed',
+}: ArrayInputProps) => {
   const [values, setValues] = useState<string[]>([])
 
   const onAdd = () => {
@@ -37,7 +40,7 @@ const ArrayInput = ({
       </Button>
 
       {values.map((val, idx) => {
-        const name = `Seed ${String(idx + 1)}`
+        const name = `${inputName} ${String(idx + 1)}`
         return (
           <ParamInput
             idlType={idlType}

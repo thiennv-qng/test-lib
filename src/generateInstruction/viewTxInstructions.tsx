@@ -21,7 +21,7 @@ const ViewTxInstructions = () => {
               header={
                 <Typography
                   level={5}
-                  className="capitalize font-bold text-white"
+                  className="capitalize font-bold !text-white"
                 >
                   {key}
                 </Typography>

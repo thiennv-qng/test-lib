@@ -30,8 +30,9 @@ export type AccountsMeta = {
   publicKey: string
   privateKey?: string
 }
+export type ArgsMeta = Record<string, string>
 export type AccountMetaState = Record<string, AccountsMeta>
-export type ArgsMetaState = Record<string, string>
+export type ArgsMetaState = Record<string, ArgsMeta>
 export type IDLParserState = {
   programAddress?: string
   instructionSelected?: string
@@ -40,7 +41,11 @@ export type IDLParserState = {
   argsMeta: ArgsMetaState
   accountsMeta: AccountMetaState
 }
-export type SetArgsMetaState = { name: string; val: string }
+export type SetArgsMetaState = {
+  instructName: string
+  name: string
+  val: string
+}
 export type SetAccountsMetaState = { name: string; data: AccountsMeta }
 export type ParserProvider = {
   parser: IDLParserState
@@ -103,7 +108,6 @@ const IDLParserContextProvider = ({
       const instructionIdl = parserData.idl?.instructions?.find(
         (elm) => elm.name === instruction,
       )
-      nextData.argsMeta = {}
       nextData.instructionIdl = instructionIdl
       nextData.instructionSelected = instruction
       return setParserData({ ...nextData })
@@ -113,10 +117,14 @@ const IDLParserContextProvider = ({
 
   const setArgsMeta = useCallback(
     (args: SetArgsMetaState | undefined) => {
-      const nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
-      if (!!args) {
-        const { name, val } = args
-        nextData.argsMeta = { ...nextData.argsMeta, [name]: val }
+      let nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
+      if (!!args && !!args.instructName) {
+        const { instructName, name, val } = args
+        const argsData = nextData.argsMeta
+        nextData.argsMeta = {
+          ...argsData,
+          [instructName]: { ...argsData[instructName], [name]: val },
+        }
       }
       return setParserData({ ...nextData })
     },

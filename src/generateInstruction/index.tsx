@@ -44,7 +44,8 @@ const GenerateInstruction = () => {
     async (data: Record<string, PublicKey>) => {
       const program = getProgram()
       if (!program || !instructionSelected || !instructionIdl) return
-      const nomalizedArgsMeta = normalizeAnchorArgs(argsMeta, instructionIdl)
+      const args = argsMeta[instructionSelected]
+      const nomalizedArgsMeta = normalizeAnchorArgs(args, instructionIdl)
       return await program.methods[instructionSelected](
         ...nomalizedArgsMeta,
       ).accounts(data)

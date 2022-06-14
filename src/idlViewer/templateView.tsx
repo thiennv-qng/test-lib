@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { useParser } from '../providers/parser.provider'
 
 const TemplateView = () => {
-  const [value, setValue] = useState('')
   const { parser, setInstruction } = useParser()
-  const { idl } = parser || {}
+  const { idl, instructionSelected } = parser || {}
+  const [value, setValue] = useState(instructionSelected)
 
   const onChange = (val: string) => {
     setValue(val)

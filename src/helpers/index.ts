@@ -2,7 +2,7 @@ import { Idl, AnchorProvider, web3, BN } from '@project-serum/anchor'
 import { IdlInstruction } from '@project-serum/anchor/dist/cjs/idl'
 import NodeWallet from '@project-serum/anchor/dist/cjs/nodewallet'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { AccountsMeta, ArgsMetaState } from 'providers/parser.provider'
+import { AccountsMeta, ArgsMeta } from 'providers/parser.provider'
 
 export const fileToBase64 = (
   file: File,
@@ -59,7 +59,7 @@ export const convertStringDataToPubKey = (
 }
 
 export const normalizeAnchorArgs = (
-  data: ArgsMetaState,
+  data: ArgsMeta,
   instructionIdl: IdlInstruction,
 ) => {
   const normalizedArgs = Object.values(data).map((value, idx) => {

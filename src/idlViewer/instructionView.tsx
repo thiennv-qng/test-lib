@@ -9,7 +9,8 @@ enum Tabs {
 }
 
 export const InstructorAccounts = () => {
-  const { accountsMeta, instructionIdl, idl } = useParser().parser
+  const { parser } = useParser()
+  const { accountsMeta, instructionIdl, idl } = parser || {}
   const setAccountsMeta = useParser().setAccountsMeta
 
   const findDefaultCategory = useCallback(
@@ -53,7 +54,7 @@ export const InstructorAccounts = () => {
 
 export const InstructorArguments = () => {
   const { parser, setArgsMeta } = useParser()
-  const { instructionIdl, argsMeta } = parser || {}
+  const { instructionIdl, argsMeta, instructionSelected } = parser || {}
 
   if (!instructionIdl?.args.length) return <Empty />
 
@@ -62,9 +63,15 @@ export const InstructorArguments = () => {
       {instructionIdl.args.map(({ name, type }, idx) => (
         <ParamInput
           idlType={type}
-          onChange={(val) => setArgsMeta({ name, val })}
+          onChange={(val) =>
+            setArgsMeta({
+              instructName: instructionSelected || '',
+              name,
+              val,
+            })
+          }
           name={name}
-          value={argsMeta[name]}
+          value={argsMeta?.[instructionSelected || '']?.[name]}
           key={idx}
         />
       ))}

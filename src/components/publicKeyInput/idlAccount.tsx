@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Program, web3 } from '@project-serum/anchor'
 import IonIcon from '@sentre/antd-ionicon'
+import { Connection } from '@solana/web3.js'
 
 import Input from '../input'
 import Button, { Spinner } from '../button'
@@ -23,7 +24,8 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
 
   const getProgram = useCallback(() => {
     if (!idl || !programAddress || !connection) return
-    const provider = getAnchorProvider(connection)
+    const connect = new Connection(connection)
+    const provider = getAnchorProvider(connect)
     const program = new Program(idl, programAddress, provider)
     return program
   }, [connection, idl, programAddress])
@@ -120,7 +122,13 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
                         onValue={() => {}}
                         bordered={false}
                       />
-                      <Button onClick={() => onChange(val)}>Select</Button>
+                      <Button
+                        type="text"
+                        className="font-bold"
+                        onClick={() => onChange(val)}
+                      >
+                        Select
+                      </Button>
                     </div>
                   ))}
                 </div>

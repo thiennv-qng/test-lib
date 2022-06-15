@@ -46,6 +46,7 @@ const TokenAccount = ({ onChange }: { onChange: (val: string) => void }) => {
       {/* Token account generated  */}
       {tokenAccount && <div>Address: {tokenAccount}</div>}
       <Button
+        type="primary"
         onClick={() => onChange(tokenAccount)}
         disabled={!tokenAccount}
         block

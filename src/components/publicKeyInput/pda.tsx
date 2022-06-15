@@ -73,6 +73,7 @@ const Pda = ({ onChange }: { onChange: (val: string) => void }) => {
         {pdaAddress && <Typography>PDA Address: {pdaAddress}</Typography>}
         {!!seeds.length && (
           <Button
+            type="primary"
             onClick={() => onChange(pdaAddress)}
             disabled={!pdaAddress}
             block

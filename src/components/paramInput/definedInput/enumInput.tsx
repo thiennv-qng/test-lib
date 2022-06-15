@@ -1,7 +1,7 @@
 import { IdlTypeDefTyEnum } from '@project-serum/anchor/dist/cjs/idl'
 
-import Button from '../../button'
-import Input from '../../input'
+import Select from 'components/select'
+import { useCallback, useEffect } from 'react'
 
 const EnumInput = ({
   enumType,
@@ -10,22 +10,25 @@ const EnumInput = ({
   enumType: IdlTypeDefTyEnum
   onChange: (val: string) => void
 }) => {
+  const onDefaultValue = useCallback(() => {
+    if (!enumType.variants.length) onChange(enumType.variants[0].name)
+  }, [enumType.variants, onChange])
+
+  // Select the
+  useEffect(() => {
+    onDefaultValue()
+  }, [onDefaultValue])
+
   return (
-    <div className="grid grid-cols-1 gap-4">
-      {enumType.variants?.map((variant) => {
+    <Select onValue={onChange} className="w-full p-[8px]">
+      {enumType.variants?.map((variant, idx) => {
         return (
-          <div className="flex flex-row gap-4" key={variant.name}>
-            <Input
-              className="flex-auto"
-              value={variant.name}
-              onValue={() => {}}
-              bordered={false}
-            />
-            <Button onClick={() => onChange(variant.name)}>Select</Button>
-          </div>
+          <option value={variant.name} key={variant.name + idx}>
+            {variant.name}
+          </option>
         )
       })}
-    </div>
+    </Select>
   )
 }
 export default EnumInput

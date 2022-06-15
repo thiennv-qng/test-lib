@@ -24,13 +24,18 @@ const SystemAccount = ({ onChange }: { onChange: (val: string) => void }) => {
     <div className="grid grid-cols-2 gap-4">
       {SYSTEM_ACCOUNTS.map((account, idx) => (
         <div key={idx}>
-          <Button onClick={() => onChange(account.value.toBase58())} block>
+          <Button
+            type="primary"
+            onClick={() => onChange(account.value.toBase58())}
+            block
+          >
             {account.name}
           </Button>
         </div>
       ))}
       <div>
         <Button
+          type="primary"
           onClick={() => onChange(walletAddress || '')}
           block
           disabled={!walletAddress}
@@ -39,7 +44,7 @@ const SystemAccount = ({ onChange }: { onChange: (val: string) => void }) => {
         </Button>
       </div>
       <div>
-        <Button onClick={onNewKeypair} block>
+        <Button type="primary" onClick={onNewKeypair} block>
           New Keypair
         </Button>
       </div>

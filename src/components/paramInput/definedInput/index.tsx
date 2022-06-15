@@ -32,7 +32,7 @@ const DefinedInput = ({
   }
 
   return (
-    <div className="border rounded-[8px] background-[#e0e0e0] p-[8px]">
+    <div className="rounded-[4px] bg-[#E0E0E0] p-2 cursor-not-allowed">
       <Typography className="text-red-600">Error</Typography>
     </div>
   )

@@ -58,6 +58,75 @@ const WrapInput = ({ inputName, idlType, onChange }: WrapInputProps) => {
   return <DefinedInput name={idlType} onChange={onChange} />
 }
 
+type ArgsInputProps = {
+  value: string
+  onChange: (val: string) => void
+  placeholder: string
+  isExist?: boolean
+  onClick?: () => void
+  onRemove?: () => void
+  acceptRemove?: boolean
+  idlType: any
+  inputName?: string
+}
+const ArgsInput = ({
+  value,
+  onChange,
+  placeholder,
+  isExist = false,
+  onClick = () => {},
+  onRemove = () => {},
+  acceptRemove = false,
+  inputName = '',
+  idlType,
+}: ArgsInputProps) => {
+  const isSpecialType = !!idlType['defined']
+
+  if (isSpecialType)
+    return (
+      <div className="flex flex-1 flex-row gap-4">
+        <WrapInput
+          idlType={idlType}
+          onChange={onChange}
+          inputName={inputName}
+        />
+        {acceptRemove && (
+          <Button
+            type="text"
+            onClick={onRemove}
+            suffix={<IonIcon name="trash-outline" />}
+          />
+        )}
+      </div>
+    )
+
+  return (
+    <div className="flex flex-1 flex-row gap-4">
+      <Input
+        className="flex-auto"
+        value={value}
+        onValue={onChange}
+        bordered={false}
+        placeholder={placeholder}
+        suffix={
+          isExist && (
+            <Button type="text" onClick={onClick}>
+              <Typography level={5}>Init</Typography>
+            </Button>
+          )
+        }
+      />
+      {acceptRemove && (
+        <Button
+          type="text"
+          onClick={onRemove}
+          suffix={<IonIcon name="trash-outline" />}
+        />
+      )}
+    </div>
+  )
+}
+
 type ParamInputProps = {
   name: string
   value: string
@@ -67,7 +136,6 @@ type ParamInputProps = {
   onRemove?: () => void
   acceptRemove?: boolean
 }
-
 const ParamInput = ({
   name,
   value,
@@ -93,8 +161,6 @@ const ParamInput = ({
           name={name}
           onChange={(acc) => onChange(acc.publicKey)}
           value={value}
-          onRemove={onRemove}
-          acceptRemove
         />
       ) : (
         <div className="grid gird-cols-1 gap-1">
@@ -104,29 +170,18 @@ const ParamInput = ({
               ({IdlParser.getTypeOfParam(idlType)})
             </Typography>
           </div>
-          <div className="flex flex-row gap-4">
-            <Input
-              className="flex-auto"
-              value={value}
-              onValue={onChange}
-              bordered={false}
-              placeholder={placeholder}
-              suffix={
-                isExist && (
-                  <Button type="text" onClick={() => setVisible(true)}>
-                    <Typography level={5}>Init</Typography>
-                  </Button>
-                )
-              }
-            />
-            {acceptRemove && (
-              <Button
-                type="text"
-                onClick={onRemove}
-                suffix={<IonIcon name="trash-outline" />}
-              />
-            )}
-          </div>
+
+          <ArgsInput
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            onClick={() => setVisible(true)}
+            onRemove={onRemove}
+            acceptRemove={acceptRemove}
+            isExist={isExist}
+            idlType={idlType}
+            inputName={name}
+          />
         </div>
       )}
       {/* Advanced input */}

@@ -12,7 +12,6 @@ import {
 } from 'react'
 import { Idl, web3 } from '@project-serum/anchor'
 import { IdlInstruction } from '@project-serum/anchor/dist/cjs/idl'
-import { Connection } from '@solana/web3.js'
 
 import { IdlParser } from '../helpers'
 
@@ -55,7 +54,7 @@ export type ParserProvider = {
   setAccountsMeta: (args: SetAccountsMetaState) => void
   removeIdl: () => void
   setTxInstructions: (args?: SetExportTxInstruction) => void
-  connection: Connection
+  connection: string
   walletAddress?: string
   txInstructions?: Record<string, TransactionInstruction>
 }
@@ -71,7 +70,7 @@ const DEFAULT_IDL = {
 
 type IDLContextProviderProps = {
   children: ReactNode
-  connection: Connection
+  connection: string
   walletAddress?: string
 }
 

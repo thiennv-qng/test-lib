@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { Program } from '@project-serum/anchor'
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey, Connection } from '@solana/web3.js'
 
 import Button from 'components/button'
 import ViewTxInstructions from './viewTxInstructions'
@@ -26,7 +26,8 @@ const GenerateInstruction = () => {
 
   const getProgram = useCallback(() => {
     if (!idl || !programAddress || !connection) return
-    const provider = getAnchorProvider(connection)
+    const connect = new Connection(connection)
+    const provider = getAnchorProvider(connect)
     return new Program(idl, programAddress, provider)
   }, [connection, idl, programAddress])
 

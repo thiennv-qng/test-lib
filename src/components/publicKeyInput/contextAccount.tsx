@@ -28,7 +28,13 @@ const ContextAccount = ({ onClick }: { onClick: (val: string) => void }) => {
                     onValue={() => {}}
                     bordered={false}
                   />
-                  <Button onClick={() => onClick(val)}>Select</Button>
+                  <Button
+                    type="text"
+                    className="font-bold"
+                    onClick={() => onClick(val)}
+                  >
+                    Select
+                  </Button>
                 </div>
               </div>
             )

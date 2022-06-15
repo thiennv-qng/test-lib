@@ -4,36 +4,64 @@ import Typography from '../components/typography'
 import UploadFIle from './uploadFile'
 
 import { useParser } from '../providers/parser.provider'
+import Tooltip from 'components/tooltip'
+
+const UploadFileName = () => {
+  const { parser } = useParser()
+  const { idl, programAddress } = parser || {}
+
+  const isEmptyProgramAddr = !programAddress
+
+  if (isEmptyProgramAddr)
+    return (
+      <Tooltip
+        title={
+          <Typography style={{ color: '#F9575E', fontSize: 12 }}>
+            Warning
+          </Typography>
+        }
+        description={
+          <Typography style={{ color: '#F9575E', fontSize: 12 }}>
+            The program address is undefined!
+          </Typography>
+        }
+        width={250}
+      >
+        <div className="flex flex-row gap-2 text-[#F9575E]">
+          <IonIcon name="document-attach-outline" />
+          <Typography className="flex-auto">{idl?.name}</Typography>
+        </div>
+      </Tooltip>
+    )
+
+  return (
+    <div className="flex flex-row gap-2 text-green-600">
+      <IonIcon name="document-attach-outline" />
+      <Typography className="flex-auto">{idl?.name}</Typography>
+    </div>
+  )
+}
 
 type ViewUploadedProps = { onClick?: () => void }
 const ViewUploaded = ({ onClick = () => {} }: ViewUploadedProps) => {
   const { parser, removeIdl } = useParser()
-  const { idl, programAddress } = parser || {}
+  const { idl } = parser || {}
 
   const remove = () => {
     removeIdl()
     return true
   }
-  const isEmptyProgramAddr = !programAddress
 
   if (!idl) return <UploadFIle />
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex flex-nowrap justify-between gap-[6px] border border-solid border-[#B3B3B3] rounded-[8px] px-[16px] py-[10px] bg-[#0000000d] text-[16px]">
-        <div className="w-[24px]">
-          <IonIcon name="document-attach-outline" />
-        </div>
-        <Typography className="flex-auto">{idl?.name}</Typography>
+      <div className="relative flex flex-nowrap justify-between gap-[6px] border border-solid border-[#B3B3B3] rounded-[8px] px-[16px] py-[10px] bg-[#0000000d] text-[16px]">
+        <UploadFileName />
         <div className="w-[24px] cursor-pointer" onClick={remove}>
           <IonIcon name="trash-outline" />
         </div>
       </div>
-      {isEmptyProgramAddr && (
-        <Typography style={{ color: '#F9575E', fontSize: 12 }}>
-          (Warning: The program address is undefined.)
-        </Typography>
-      )}
     </div>
   )
 }

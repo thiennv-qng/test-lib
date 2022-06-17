@@ -11,7 +11,6 @@ import {
   useMemo,
 } from 'react'
 import { Idl, web3 } from '@project-serum/anchor'
-import { IdlInstruction } from '@project-serum/anchor/dist/cjs/idl'
 
 import { IdlParser } from '../helpers'
 
@@ -37,13 +36,15 @@ export type AccountsMeta = {
 export type ArgsMeta = Record<string, string>
 export type AccountMetaState = Record<string, AccountsMeta>
 export type ArgsMetaState = Record<string, ArgsMeta>
+
 export type IDLParserState = {
   programAddress?: string
-  instructionSelected?: string
-  instructionIdl?: IdlInstruction
+  ixSelected: string
   idl?: Idl
-  argsMeta: ArgsMetaState
-  accountsMeta: AccountMetaState
+  // instructionIdl?: IdlInstruction
+
+  argsMetas: ArgsMetaState
+  accountsMetas: AccountMetaState
   remainingAccounts: Record<string, RemainingAccounts[]>
 }
 export type SetArgsMetaState = {
@@ -67,13 +68,12 @@ export type ParserProvider = {
   setRemainingAccouts: (args: SetRemainingAccounts) => void
 }
 
-const DEFAULT_PARSER_IDL = {
+const DEFAULT_PARSER_IDL: IDLParserState = {
   programAddress: '',
-  instructionSelected: '',
-  instructionIdl: undefined,
+  ixSelected: '',
   idl: undefined,
-  argsMeta: {},
-  accountsMeta: {},
+  argsMetas: {},
+  accountsMetas: {},
   remainingAccounts: {},
 }
 
@@ -108,17 +108,12 @@ const IDLParserContextProvider = ({
     setTxInstruct({})
   }, [])
 
-  const setInstruction = useCallback(
-    (instruction: string | undefined) => {
+  const selectInstruction = useCallback(
+    (ixName: string) => {
       const nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
-      if (nextData.instructionSelected === instruction) return
-
-      const instructionIdl = parserData.idl?.instructions?.find(
-        (elm) => elm.name === instruction,
-      )
-      nextData.instructionIdl = instructionIdl
-      nextData.instructionSelected = instruction
-      return setParserData({ ...nextData })
+      if (nextData.ixSelected === ixName) return
+      nextData.ixSelected = ixName
+      return setParserData(nextData)
     },
     [parserData],
   )
@@ -128,8 +123,8 @@ const IDLParserContextProvider = ({
       let nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
       if (!!args && !!args.instructName) {
         const { instructName, name, val } = args
-        const argsData = nextData.argsMeta
-        nextData.argsMeta = {
+        const argsData = nextData.argsMetas
+        nextData.argsMetas = {
           ...argsData,
           [instructName]: { ...argsData[instructName], [name]: val },
         }
@@ -144,7 +139,7 @@ const IDLParserContextProvider = ({
       const nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
       if (!!args) {
         const { name, data } = args
-        nextData.accountsMeta = { ...nextData.accountsMeta, [name]: data }
+        nextData.accountsMetas = { ...nextData.accountsMetas, [name]: data }
       }
       return setParserData({ ...nextData })
     },
@@ -179,7 +174,7 @@ const IDLParserContextProvider = ({
   const provider = useMemo(
     () => ({
       parser: parserData,
-      setInstruction,
+      setInstruction: selectInstruction,
       uploadIdl,
       setArgsMeta,
       setAccountsMeta,
@@ -192,7 +187,7 @@ const IDLParserContextProvider = ({
     }),
     [
       parserData,
-      setInstruction,
+      selectInstruction,
       uploadIdl,
       setArgsMeta,
       setAccountsMeta,

@@ -4,53 +4,44 @@ import { PublicKey } from '@solana/web3.js'
 import Button from 'components/button'
 import ViewTxInstructions from './viewTxInstructions'
 
-import { convertStringDataToPubKey, normalizeAnchorArgs } from 'helpers'
+import { convertStringDataToPubKey } from 'helpers'
 import { useParser } from 'providers/parser.provider'
 import { useProgram } from 'hooks/useProgram'
+import { useArgs } from 'hooks/useArgs'
 
 const GenerateInstruction = () => {
   const [loading, setLoading] = useState(false)
   const { parser, setTxInstructions } = useParser()
   const {
-    accountsMeta,
-    argsMeta,
-    instructionSelected,
-    instructionIdl,
+    accountsMetas: accountsMeta,
+    ixSelected,
     remainingAccounts,
   } = parser || {}
   const program = useProgram()
+  const args = useArgs(ixSelected)
+
+  const initInstructionWithArgs = useCallback(
+    async (data: Record<string, PublicKey>) => {
+      return await program.methods[ixSelected](args).accounts(data)
+    },
+    [args, ixSelected, program.methods],
+  )
 
   const initInstructionNonArgs = useCallback(
     async (data: Record<string, PublicKey>) => {
-      if (!program || !instructionSelected) return
-      return await program.methods[instructionSelected]().accounts(data)
+      return await program.methods[ixSelected]().accounts(data)
     },
-    [instructionSelected, program],
-  )
-
-  const initInstruction = useCallback(
-    async (data: Record<string, PublicKey>) => {
-      if (!program || !instructionSelected || !instructionIdl) return
-      const args = argsMeta[instructionSelected]
-      const nomalizedArgsMeta = normalizeAnchorArgs(args, instructionIdl)
-      return await program.methods[instructionSelected](
-        ...nomalizedArgsMeta,
-      ).accounts(data)
-    },
-    [argsMeta, instructionIdl, instructionSelected, program],
+    [ixSelected, program.methods],
   )
 
   const onInit = async () => {
     try {
-      if (!instructionSelected) return
-
       setLoading(true)
 
       const accountsMetaPubkey = convertStringDataToPubKey(accountsMeta)
       let nextRemainingAccounts = []
 
-      for (const remainingAccout of remainingAccounts[instructionSelected] ||
-        []) {
+      for (const remainingAccout of remainingAccounts[ixSelected] || []) {
         const nextRemainingAccount = {
           ...remainingAccout,
           pubkey: new PublicKey(remainingAccout.pubkey),
@@ -58,18 +49,18 @@ const GenerateInstruction = () => {
         nextRemainingAccounts.push(nextRemainingAccount)
       }
 
-      let instruction = undefined
-      if (!!instructionIdl?.args.length)
-        instruction = await initInstruction(accountsMetaPubkey)
-      else instruction = await initInstructionNonArgs(accountsMetaPubkey)
+      const instruction = !args.length
+        ? await initInstructionNonArgs(accountsMetaPubkey)
+        : await initInstructionWithArgs(accountsMetaPubkey)
 
       const data = await instruction
-        ?.remainingAccounts(nextRemainingAccounts)
+        .remainingAccounts(nextRemainingAccounts)
         .instruction()
-      if (!data) return setTxInstructions()
-      return setTxInstructions({ name: instructionSelected || '', data })
+
+      return setTxInstructions({ name: ixSelected, data })
     } catch (err) {
       console.log(err, 'err')
+      return setTxInstructions()
     } finally {
       setLoading(false)
     }

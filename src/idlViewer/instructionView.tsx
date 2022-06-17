@@ -4,6 +4,7 @@ import { useParser } from '../providers/parser.provider'
 import { AddressCategory } from '../constants'
 import Typography from 'components/typography'
 import RemainingInput from 'components/remainingInput'
+import { useIdlInstruction } from 'hooks/useIdlInstruction'
 
 enum Tabs {
   Accounts = 'accounts',
@@ -11,9 +12,9 @@ enum Tabs {
 }
 
 export const InstructorAccounts = () => {
-  const { parser } = useParser()
-  const { accountsMeta, instructionIdl, idl } = parser || {}
-  const setAccountsMeta = useParser().setAccountsMeta
+  const { parser, setAccountsMeta } = useParser()
+  const { accountsMetas: accountsMeta, idl, ixSelected } = parser || {}
+  const idlInstruction = useIdlInstruction(ixSelected)
 
   const findDefaultCategory = useCallback(
     (accountName: string) => {
@@ -36,12 +37,12 @@ export const InstructorAccounts = () => {
     [idl],
   )
 
-  if (!instructionIdl?.accounts.length) return <Empty />
+  if (!idlInstruction?.accounts.length) return <Empty />
   return (
     <div className="grid grid-cols-1 gap-6">
       <div className="flex flex-col gap-4">
         <Typography className="font-bold text-[18px]">Accounts</Typography>
-        {instructionIdl.accounts.map((account, idx) => (
+        {idlInstruction.accounts.map((account, idx) => (
           <PublicKeyInput
             onChange={(accData) =>
               setAccountsMeta({ name: account.name, data: accData })
@@ -65,24 +66,24 @@ export const InstructorAccounts = () => {
 
 export const InstructorArguments = () => {
   const { parser, setArgsMeta } = useParser()
-  const { instructionIdl, argsMeta, instructionSelected } = parser || {}
+  const { argsMetas, ixSelected } = parser || {}
+  const idlInstruction = useIdlInstruction(ixSelected)
 
-  if (!instructionIdl?.args.length) return <Empty />
-
+  if (!idlInstruction?.args.length) return <Empty />
   return (
     <div className="flex flex-col gap-4">
-      {instructionIdl.args.map(({ name, type }, idx) => (
+      {idlInstruction.args.map(({ name, type }, idx) => (
         <ParamInput
           idlType={type}
           onChange={(val) =>
             setArgsMeta({
-              instructName: instructionSelected || '',
+              instructName: ixSelected,
               name,
               val,
             })
           }
           name={name}
-          value={argsMeta?.[instructionSelected || '']?.[name]}
+          value={argsMetas[ixSelected]?.[name]}
           key={idx}
         />
       ))}

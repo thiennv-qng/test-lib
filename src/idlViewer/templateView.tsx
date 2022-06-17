@@ -5,7 +5,7 @@ import { useParser } from '../providers/parser.provider'
 
 const TemplateView = () => {
   const { parser, setInstruction } = useParser()
-  const { idl, instructionSelected } = parser || {}
+  const { idl, ixSelected: instructionSelected } = parser || {}
   const [value, setValue] = useState(instructionSelected)
 
   const onChange = (val: string) => {

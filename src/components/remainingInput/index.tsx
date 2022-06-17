@@ -16,7 +16,7 @@ const DEFAULT_REMAINING_ACCOUNT = {
 
 const RemainingInput = () => {
   const { setRemainingAccouts, parser } = useParser()
-  const { remainingAccounts, instructionSelected } = parser || {}
+  const { remainingAccounts, ixSelected: instructionSelected } = parser || {}
   const [seeds, setSeeds] = useState<RemainingAccounts[]>([])
 
   const onAdd = () => {

@@ -1,50 +1,35 @@
 import { useCallback, useState } from 'react'
-import { Program } from '@project-serum/anchor'
-import { PublicKey, Connection } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 
 import Button from 'components/button'
 import ViewTxInstructions from './viewTxInstructions'
 
-import {
-  convertStringDataToPubKey,
-  getAnchorProvider,
-  normalizeAnchorArgs,
-} from 'helpers'
+import { convertStringDataToPubKey, normalizeAnchorArgs } from 'helpers'
 import { useParser } from 'providers/parser.provider'
+import { useProgram } from 'hooks/useProgram'
 
 const GenerateInstruction = () => {
   const [loading, setLoading] = useState(false)
-  const { parser, connection, setTxInstructions } = useParser()
+  const { parser, setTxInstructions } = useParser()
   const {
-    idl,
-    programAddress,
     accountsMeta,
     argsMeta,
     instructionSelected,
     instructionIdl,
     remainingAccounts,
   } = parser || {}
-
-  const getProgram = useCallback(() => {
-    if (!idl || !programAddress || !connection) return
-    const connect = new Connection(connection)
-    const provider = getAnchorProvider(connect)
-    return new Program(idl, programAddress, provider)
-  }, [connection, idl, programAddress])
+  const program = useProgram()
 
   const initInstructionNonArgs = useCallback(
     async (data: Record<string, PublicKey>) => {
-      const program = getProgram()
       if (!program || !instructionSelected) return
-
       return await program.methods[instructionSelected]().accounts(data)
     },
-    [getProgram, instructionSelected],
+    [instructionSelected, program],
   )
 
   const initInstruction = useCallback(
     async (data: Record<string, PublicKey>) => {
-      const program = getProgram()
       if (!program || !instructionSelected || !instructionIdl) return
       const args = argsMeta[instructionSelected]
       const nomalizedArgsMeta = normalizeAnchorArgs(args, instructionIdl)
@@ -52,7 +37,7 @@ const GenerateInstruction = () => {
         ...nomalizedArgsMeta,
       ).accounts(data)
     },
-    [argsMeta, getProgram, instructionIdl, instructionSelected],
+    [argsMeta, instructionIdl, instructionSelected, program],
   )
 
   const onInit = async () => {

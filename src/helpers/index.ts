@@ -1,7 +1,6 @@
-import { Idl, AnchorProvider, web3, BN } from '@project-serum/anchor'
+import { Idl, web3, BN } from '@project-serum/anchor'
 import { IdlInstruction } from '@project-serum/anchor/dist/cjs/idl'
-import NodeWallet from '@project-serum/anchor/dist/cjs/nodewallet'
-import { Connection, PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { AccountsMeta, ArgsMeta } from 'providers/parser.provider'
 
 export const fileToBase64 = (
@@ -33,15 +32,6 @@ export class IdlParser {
     }
     return '-'
   }
-}
-
-export const getAnchorProvider = (connection: Connection) => {
-  const keyPair = web3.Keypair.generate()
-  const wallet = new NodeWallet(keyPair)
-  return new AnchorProvider(connection, wallet, {
-    commitment: 'confirmed',
-    skipPreflight: true,
-  })
 }
 
 export const convertStringDataToPubKey = (

@@ -20,7 +20,10 @@ const EnumInput = ({
   }, [onDefaultValue])
 
   return (
-    <Select onValue={onChange} className="w-full p-[8px]">
+    <Select
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full p-[8px]"
+    >
       {enumType.variants?.map((variant, idx) => {
         return (
           <option value={variant.name} key={variant.name + idx}>

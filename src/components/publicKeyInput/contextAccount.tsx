@@ -25,7 +25,7 @@ const ContextAccount = ({ onClick }: { onClick: (val: string) => void }) => {
                   <Input
                     className="flex-auto"
                     value={val}
-                    onValue={() => {}}
+                    onChange={() => {}}
                     bordered={false}
                   />
                   <Button

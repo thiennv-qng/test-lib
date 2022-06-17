@@ -80,7 +80,7 @@ const PublicKeyInput = ({
           className="flex-auto"
           value={value}
           placeholder={placeholder}
-          onValue={onChangePublicKey}
+          onChange={(e) => onChangePublicKey(e.target.value)}
           bordered={false}
           suffix={
             <Button type="text" onClick={() => setVisible(true)}>
@@ -91,8 +91,7 @@ const PublicKeyInput = ({
         <Select
           style={{ minWidth: 120 }}
           value={category}
-          // @ts-ignore
-          onValue={setCategory}
+          onChange={(e) => setCategory(e.target.value as AddressCategory)}
         >
           {SELECT_SYSTEM.map((item, idx) => (
             <option

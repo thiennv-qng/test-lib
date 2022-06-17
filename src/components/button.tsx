@@ -57,7 +57,7 @@ const Button = ({
   const disabledBtn = loading || disabled
   const width = block ? { width: '100%' } : {}
   const btnStyle = { ...BUTTON_TYPE[type], ...width, ...style }
-  const btnCln = `${className} flex flex-row justify-center items-center gap-2 py-2 px-4 rounded-[4px] font-medium border border-[#B3B3B3] ${
+  const btnCln = `${className} btn-sen-parser flex flex-row justify-center items-center gap-2 py-2 px-4 rounded-[4px] font-medium border border-[#B3B3B3] ${
     type === 'primary' ? 'bg-[#5D6CCF] !text-white border-transparent' : ''
   } `
 

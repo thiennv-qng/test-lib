@@ -1,8 +1,7 @@
-import { CSSProperties, InputHTMLAttributes, ReactNode } from 'react'
+import React, { CSSProperties, InputHTMLAttributes, ReactNode } from 'react'
 
 type InputProps = {
-  value: string
-  onValue: (value: string) => void
+  value?: string
   suffix?: ReactNode
   preffix?: ReactNode
   bordered?: boolean
@@ -10,18 +9,18 @@ type InputProps = {
   bodyStyle?: CSSProperties
   className?: string
   placeholder?: string
-} & InputHTMLAttributes<Element>
+} & InputHTMLAttributes<HTMLInputElement>
 
 const Input = ({
-  value,
+  value = '',
   bordered = true,
   suffix,
   preffix,
   style,
   bodyStyle,
-  onValue,
   className = '',
   placeholder = '',
+  ...props
 }: InputProps) => {
   const clnBorder = bordered
     ? 'border border-inherit'
@@ -39,7 +38,7 @@ const Input = ({
         }}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onValue(e.target.value)}
+        {...props}
       />
       {suffix}
     </div>

@@ -105,7 +105,7 @@ const ArgsInput = ({
       <Input
         className="flex-auto"
         value={value}
-        onValue={onChange}
+        onChange={(e) => onChange(e.target.value)}
         bordered={false}
         placeholder={placeholder}
         suffix={

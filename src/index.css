@@ -37,6 +37,9 @@
 *:disabled {
   opacity: 0.5;
 }
+button.btn-sen-parser * {
+  line-height: 0;
+}
 /* Segmented */
 .sntr-segmented {
   box-sizing: border-box;

@@ -22,6 +22,7 @@ const GenerateInstruction = () => {
     argsMeta,
     instructionSelected,
     instructionIdl,
+    remainingAccounts,
   } = parser || {}
 
   const getProgram = useCallback(() => {
@@ -56,14 +57,30 @@ const GenerateInstruction = () => {
 
   const onInit = async () => {
     try {
+      if (!instructionSelected) return
+
       setLoading(true)
+
       const accountsMetaPubkey = convertStringDataToPubKey(accountsMeta)
+      let nextRemainingAccounts = []
+
+      for (const remainingAccout of remainingAccounts[instructionSelected] ||
+        []) {
+        const nextRemainingAccount = {
+          ...remainingAccout,
+          pubkey: new PublicKey(remainingAccout.pubkey),
+        }
+        nextRemainingAccounts.push(nextRemainingAccount)
+      }
 
       let instruction = undefined
       if (!!instructionIdl?.args.length)
         instruction = await initInstruction(accountsMetaPubkey)
       else instruction = await initInstructionNonArgs(accountsMetaPubkey)
-      const data = await instruction?.instruction()
+
+      const data = await instruction
+        ?.remainingAccounts(nextRemainingAccounts)
+        .instruction()
       if (!data) return setTxInstructions()
       return setTxInstructions({ name: instructionSelected || '', data })
     } catch (err) {

@@ -6,18 +6,18 @@ import Typography from 'components/typography'
 import Input from 'components/input'
 import Switch from 'components/switch'
 
-import { RemainingAccounts, useParser } from 'providers/parser.provider'
+import { AccountMetaAddress, useParser } from 'providers/parser.provider'
 
-const DEFAULT_REMAINING_ACCOUNT = {
+const DEFAULT_REMAINING_ACCOUNT: AccountMetaAddress = {
   isSigner: false,
   isWritable: true,
-  pubkey: '',
+  address: '',
 }
 
 const RemainingInput = () => {
   const { setRemainingAccouts, parser } = useParser()
   const { remainingAccounts, ixSelected: instructionSelected } = parser || {}
-  const [seeds, setSeeds] = useState<RemainingAccounts[]>([])
+  const [seeds, setSeeds] = useState<AccountMetaAddress[]>([])
 
   const onAdd = () => {
     const newSeed = [...seeds]
@@ -150,7 +150,7 @@ const RemainingInput = () => {
                     <Typography secondary>Publickey</Typography>
                     <Input
                       name="pubkey"
-                      value={data.pubkey || ''}
+                      value={data.address || ''}
                       onChange={(e) => handleChangeRemainingAccount(e, idx)}
                       bordered={false}
                     />

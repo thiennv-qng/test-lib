@@ -1,5 +1,4 @@
-import { useCallback, useState } from 'react'
-import { PublicKey } from '@solana/web3.js'
+import { useState } from 'react'
 
 import Button from 'components/button'
 import ViewTxInstructions from './viewTxInstructions'
@@ -8,56 +7,27 @@ import { convertStringDataToPubKey } from 'helpers'
 import { useParser } from 'providers/parser.provider'
 import { useProgram } from 'hooks/useProgram'
 import { useArgs } from 'hooks/useArgs'
+import { useRemainingAccounts } from 'hooks/useRemainingAccounts'
 
 const GenerateInstruction = () => {
   const [loading, setLoading] = useState(false)
   const { parser, setTxInstructions } = useParser()
-  const {
-    accountsMetas: accountsMeta,
-    ixSelected,
-    remainingAccounts,
-  } = parser || {}
+  const { accountsMetas: accountsMeta, ixSelected } = parser
   const program = useProgram()
   const args = useArgs(ixSelected)
-
-  const initInstructionWithArgs = useCallback(
-    async (data: Record<string, PublicKey>) => {
-      return await program.methods[ixSelected](args).accounts(data)
-    },
-    [args, ixSelected, program.methods],
-  )
-
-  const initInstructionNonArgs = useCallback(
-    async (data: Record<string, PublicKey>) => {
-      return await program.methods[ixSelected]().accounts(data)
-    },
-    [ixSelected, program.methods],
-  )
+  const remainingAccounts = useRemainingAccounts(ixSelected)
 
   const onInit = async () => {
     try {
       setLoading(true)
-
       const accountsMetaPubkey = convertStringDataToPubKey(accountsMeta)
-      let nextRemainingAccounts = []
-
-      for (const remainingAccout of remainingAccounts[ixSelected] || []) {
-        const nextRemainingAccount = {
-          ...remainingAccout,
-          pubkey: new PublicKey(remainingAccout.pubkey),
-        }
-        nextRemainingAccounts.push(nextRemainingAccount)
-      }
-
-      const instruction = !args.length
-        ? await initInstructionNonArgs(accountsMetaPubkey)
-        : await initInstructionWithArgs(accountsMetaPubkey)
-
-      const data = await instruction
-        .remainingAccounts(nextRemainingAccounts)
+      const instruction = await program.methods[ixSelected]
+        .call(this, ...args)
+        .accounts(accountsMetaPubkey)
+        .remainingAccounts(remainingAccounts)
         .instruction()
 
-      return setTxInstructions({ name: ixSelected, data })
+      return setTxInstructions({ name: ixSelected, data: instruction })
     } catch (err) {
       console.log(err, 'err')
       return setTxInstructions()

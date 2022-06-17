@@ -24,10 +24,10 @@ export type SetExportTxInstruction = {
   data: TransactionInstruction
 }
 
-export type RemainingAccounts = {
+export type AccountMetaAddress = {
   isSigner: boolean
   isWritable: boolean
-  pubkey: string
+  address: string
 }
 export type AccountsMeta = {
   publicKey: string
@@ -42,10 +42,9 @@ export type IDLParserState = {
   ixSelected: string
   idl?: Idl
   // instructionIdl?: IdlInstruction
-
   argsMetas: ArgsMetaState
   accountsMetas: AccountMetaState
-  remainingAccounts: Record<string, RemainingAccounts[]>
+  remainingAccounts: Record<string, AccountMetaAddress[]>
 }
 export type SetArgsMetaState = {
   instructName: string
@@ -53,7 +52,7 @@ export type SetArgsMetaState = {
   val: string
 }
 export type SetAccountsMetaState = { name: string; data: AccountsMeta }
-export type SetRemainingAccounts = { name: string; data: RemainingAccounts[] }
+export type SetRemainingAccounts = { name: string; data: AccountMetaAddress[] }
 export type ParserProvider = {
   parser: IDLParserState
   setInstruction: (instruc: string) => void
@@ -113,6 +112,10 @@ const IDLParserContextProvider = ({
       const nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
       if (nextData.ixSelected === ixName) return
       nextData.ixSelected = ixName
+      // Default instruction data
+      nextData.argsMetas[ixName] = {}
+      nextData.remainingAccounts[ixName] = []
+      nextData.accountsMetas = {}
       return setParserData(nextData)
     },
     [parserData],

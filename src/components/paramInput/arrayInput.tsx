@@ -38,7 +38,7 @@ const ArrayInput = ({
     const stringData = values.join(',')
     onChange(stringData)
   }
-  console.log(values)
+
   return (
     <div className="flex flex-col gap-6">
       <Button type="dashed" onClick={() => onAdd()}>

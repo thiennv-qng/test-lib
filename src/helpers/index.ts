@@ -114,3 +114,5 @@ export const normalizeAnchorArgs = (
   })
   return normalizedArgs
 }
+
+export const normalizeArg = (ixName?: string) => {}

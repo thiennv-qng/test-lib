@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { IdlTypeDefTyStruct } from '@project-serum/anchor/dist/cjs/idl'
 
 import ParamInput from '../index'
-import Button from '../../button'
 
 const StructInput = ({
   structType,
@@ -17,23 +16,23 @@ const StructInput = ({
     const newData = { ...structData }
     newData[key] = val
     setStructData(newData)
+
+    return onChange(JSON.stringify(newData))
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      {structType.fields?.map(({ name, type }) => {
+    <div className="flex flex-col w-full p-4 gap-2 rounded-[4px] shadow-[0_0_8px_#181c3630]">
+      {structType.fields?.map(({ name, type }, idx) => {
         return (
           <ParamInput
             name={name}
             idlType={type}
             value={structData[name] || ''}
             onChange={(data) => onChangeStruct(name, data)}
+            key={idx}
           />
         )
       })}
-      <Button onClick={() => onChange(JSON.stringify(structData))} block>
-        Done
-      </Button>
     </div>
   )
 }

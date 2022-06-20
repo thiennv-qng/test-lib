@@ -8,8 +8,17 @@ const DEFAULT_IDL: Idl = {
   name: 'DEFAULT_IDL',
   instructions: [],
 }
+const DEFAULT_IDL_PROGRAM_ADDRESS =
+  'Hxzy3cvdPz48RodavEN4P41TZp4g6Vd1kEMaUiZMof1u'
+
 export const useProgram = () => {
   const provider = useProvider()
-  const { idl = DEFAULT_IDL, programAddress = '' } = useParser().parser
-  return new Program(idl, programAddress, provider)
+  const { parser } = useParser()
+  const { idl = DEFAULT_IDL, programAddress } = parser
+
+  let paramProgramAddr = !!programAddress
+    ? programAddress
+    : DEFAULT_IDL_PROGRAM_ADDRESS
+
+  return new Program(idl, paramProgramAddr, provider)
 }

@@ -69,19 +69,31 @@ export const InstructorArguments = () => {
   const { argsMetas, ixSelected } = parser || {}
   const idlInstruction = useIdlInstruction(ixSelected)
 
+  const parseStringArgsValue = (val: string) => {
+    try {
+      return JSON.parse(val)
+    } catch (error) {
+      return val
+    }
+  }
+
+  const onChange = (name: string, val: string) => {
+    let parsedVal = parseStringArgsValue(val)
+
+    return setArgsMeta({
+      instructName: ixSelected,
+      name,
+      val: parsedVal,
+    })
+  }
+
   if (!idlInstruction?.args.length) return <Empty />
   return (
     <div className="flex flex-col gap-4">
       {idlInstruction.args.map(({ name, type }, idx) => (
         <ParamInput
           idlType={type}
-          onChange={(val) =>
-            setArgsMeta({
-              instructName: ixSelected,
-              name,
-              val,
-            })
-          }
+          onChange={(val) => onChange(name, val)}
           name={name}
           value={argsMetas[ixSelected]?.[name]}
           key={idx}

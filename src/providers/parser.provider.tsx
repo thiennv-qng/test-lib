@@ -113,8 +113,11 @@ const IDLParserContextProvider = ({
       if (nextData.ixSelected === ixName) return
       nextData.ixSelected = ixName
       // Default instruction data
-      // nextData.argsMetas[ixName] = {}
-      nextData.remainingAccounts[ixName] = []
+      if (
+        !nextData.remainingAccounts[ixName] ||
+        !nextData.remainingAccounts[ixName].length
+      )
+        nextData.remainingAccounts[ixName] = []
       return setParserData(nextData)
     },
     [parserData],

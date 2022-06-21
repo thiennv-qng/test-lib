@@ -16,35 +16,36 @@ const DEFAULT_REMAINING_ACCOUNT: AccountMetaAddress = {
 
 const RemainingInput = () => {
   const { setRemainingAccouts, parser } = useParser()
-  const { remainingAccounts, ixSelected: instructionSelected } = parser || {}
+  const { remainingAccounts, ixSelected } = parser || {}
   const [seeds, setSeeds] = useState<AccountMetaAddress[]>([])
 
   const onAdd = () => {
     const newSeed = [...seeds]
     newSeed.push(DEFAULT_REMAINING_ACCOUNT)
     setSeeds(newSeed)
-    if (!instructionSelected) return
+    if (!ixSelected) return
 
-    const nextRemainingAcounts = remainingAccounts[instructionSelected] || []
+    const nextRemainingAcounts = remainingAccounts[ixSelected] || []
     nextRemainingAcounts.push(DEFAULT_REMAINING_ACCOUNT)
 
     return setRemainingAccouts({
-      name: instructionSelected,
+      name: ixSelected,
       data: nextRemainingAcounts,
     })
   }
+
   const onRemove = (index: number) => {
     const newSeed = [...seeds]
     newSeed.splice(index, 1)
     setSeeds(newSeed)
 
-    if (!instructionSelected) return
+    if (!ixSelected) return
 
-    const nextRemainingAcounts = remainingAccounts[instructionSelected] || []
+    const nextRemainingAcounts = remainingAccounts[ixSelected] || []
     nextRemainingAcounts.splice(index, 1)
 
     return setRemainingAccouts({
-      name: instructionSelected,
+      name: ixSelected,
       data: nextRemainingAcounts,
     })
   }
@@ -53,7 +54,7 @@ const RemainingInput = () => {
     event: ChangeEvent<HTMLInputElement>,
     index: number,
   ) => {
-    if (!instructionSelected) return
+    if (!ixSelected) return
 
     const elmName = event.target.name
     const ipType = event.target.type
@@ -61,7 +62,7 @@ const RemainingInput = () => {
       ipType === 'checkbox' ? event.target.checked : event.target.value
 
     const nextRemainingAcounts = JSON.parse(JSON.stringify(remainingAccounts))
-    const nextRemainingData = nextRemainingAcounts[instructionSelected] || []
+    const nextRemainingData = nextRemainingAcounts[ixSelected] || []
 
     const indexData = nextRemainingData[index]
     if (!!indexData) {
@@ -74,20 +75,18 @@ const RemainingInput = () => {
       }
       nextRemainingData.push(newRemainingData)
     }
+
     setRemainingAccouts({
-      name: instructionSelected,
+      name: ixSelected,
       data: nextRemainingData,
     })
   }
 
   useEffect(() => {
-    if (
-      !!instructionSelected &&
-      !!remainingAccounts[instructionSelected]?.length
-    )
-      setSeeds(remainingAccounts[instructionSelected])
+    if (!!ixSelected && !!remainingAccounts[ixSelected]?.length)
+      setSeeds(remainingAccounts[ixSelected])
     return () => setSeeds([])
-  }, [instructionSelected, remainingAccounts])
+  }, [ixSelected, remainingAccounts])
 
   return (
     <div className="flex flex-col gap-8">
@@ -102,7 +101,7 @@ const RemainingInput = () => {
       <div className="grid grid-cols-1 gap-6">
         <div className="grid grid-cols-1 gap-4">
           {seeds.map((_, idx) => {
-            const listData = remainingAccounts[instructionSelected || '']
+            const listData = remainingAccounts[ixSelected || '']
             const data = listData?.[idx] || {}
 
             return (
@@ -149,8 +148,8 @@ const RemainingInput = () => {
                   <div>
                     <Typography secondary>Publickey</Typography>
                     <Input
-                      name="pubkey"
-                      value={data.address || ''}
+                      name="address"
+                      value={data.address}
                       onChange={(e) => handleChangeRemainingAccount(e, idx)}
                       bordered={false}
                     />

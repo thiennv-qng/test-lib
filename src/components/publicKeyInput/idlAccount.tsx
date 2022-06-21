@@ -80,7 +80,11 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
             preffix={loading ? <Spinner /> : <IonIcon name="search-outline" />}
             className="flex-auto stroke-slate-500"
           />
-          <Select value={accountType} style={{ minWidth: 120, minHeight: 32 }}>
+          <Select
+            value={accountType}
+            onChange={(e) => setAccountType(e.target.value)}
+            style={{ minWidth: 120, minHeight: 32 }}
+          >
             {idl?.accounts?.map((acc, idx) => {
               return (
                 <option value={acc.name} key={idx}>
@@ -106,6 +110,8 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
                         className="flex-auto"
                         value={val}
                         bordered={false}
+                        // Do nothing
+                        onChange={() => {}}
                       />
                       <Button
                         type="text"

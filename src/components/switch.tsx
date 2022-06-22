@@ -3,7 +3,7 @@ import { InputHTMLAttributes } from 'react'
 type SwitchProps = { checked?: boolean } & InputHTMLAttributes<HTMLInputElement>
 const Switch = ({ checked = false, ...props }: SwitchProps) => {
   return (
-    <label className="relative w-[48px] h-[24px]">
+    <label className="flex relative w-[48px] h-[24px]">
       <input
         {...props}
         type="checkbox"

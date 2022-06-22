@@ -58,7 +58,7 @@ export const normalizeAnchorArgs = (
       case 'publicKey':
         return new PublicKey(value)
       case 'bool':
-        return Boolean(value)
+        return JSON.parse(value)
       case 'u64':
       case 'u128':
       case 'i64':

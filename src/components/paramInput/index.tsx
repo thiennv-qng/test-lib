@@ -12,6 +12,7 @@ import PublicKeyInput from 'components/publicKeyInput'
 import { useParser } from '../../providers/parser.provider'
 import { IdlParser } from 'helpers'
 import IonIcon from '@sentre/antd-ionicon'
+import BoolInput from './boolInput'
 
 const NORMAL_TYPES = [
   'u8',
@@ -36,19 +37,22 @@ const WrapInput = ({ inputName, idlType, onChange }: WrapInputProps) => {
   const { parser } = useParser()
   if (!parser.idl?.accounts) return null
 
-  if (idlType['vec'])
-    return <ArrayInput idlType={idlType['vec']} onChange={onChange} />
-  if (idlType['array']) {
-    if (Array.isArray(idlType['array'])) {
-      return <ArrayInput idlType={idlType['array'][0]} onChange={onChange} />
+  const vecType = idlType['vec']
+  const arrayType = idlType['array']
+  const definedType = idlType['defined']
+
+  if (!!vecType) return <ArrayInput idlType={vecType} onChange={onChange} />
+  if (!!arrayType) {
+    if (Array.isArray(!!arrayType)) {
+      return <ArrayInput idlType={arrayType[0]} onChange={onChange} />
     }
-    return <ArrayInput idlType={idlType['array']} onChange={onChange} />
+    return <ArrayInput idlType={arrayType} onChange={onChange} />
   }
 
-  if (idlType['defined']) {
+  if (!!definedType) {
     return (
       <WrapInput
-        idlType={idlType['defined']}
+        idlType={definedType}
         inputName={inputName}
         onChange={onChange}
       />
@@ -61,7 +65,7 @@ const WrapInput = ({ inputName, idlType, onChange }: WrapInputProps) => {
 type ArgsInputProps = {
   value: string
   onChange: (val: string) => void
-  placeholder: string
+  placeholder?: string
   isExist?: boolean
   onClick?: () => void
   onRemove?: () => void
@@ -72,7 +76,7 @@ type ArgsInputProps = {
 const ArgsInput = ({
   value,
   onChange,
-  placeholder,
+  placeholder = '',
   isExist = false,
   onClick = () => {},
   onRemove = () => {},
@@ -80,9 +84,12 @@ const ArgsInput = ({
   inputName = '',
   idlType,
 }: ArgsInputProps) => {
-  const isSpecialType = !!idlType['defined']
+  const isDefinedType = !!idlType['defined']
+  const isBoolType = idlType === 'bool'
 
-  if (isSpecialType)
+  if (isBoolType) return <BoolInput value={value} onChange={onChange} />
+
+  if (isDefinedType)
     return (
       <div className="flex flex-1 flex-row gap-4">
         <WrapInput

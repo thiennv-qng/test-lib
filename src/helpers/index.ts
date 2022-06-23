@@ -124,7 +124,6 @@ export const convertArgsByType = (
         const nextRawData = JSON.parse(JSON.stringify(raw))
         const typeIdlStruct = typeIdlEnum?.type as IdlTypeDefTyStruct
         for (const { name, type } of typeIdlStruct.fields) {
-          console.log(name, nextRawData, nextRawData[name], 'asd 123')
           if (!!nextRawData[name])
             nextRawData[name] = convertArgsByType(
               nextRawData[name],
@@ -133,7 +132,6 @@ export const convertArgsByType = (
             )
           continue
         }
-        console.log(nextRawData, 'next')
         return nextRawData
       }
       return raw

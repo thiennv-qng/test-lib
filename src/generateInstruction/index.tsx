@@ -20,7 +20,6 @@ const GenerateInstruction = () => {
   const onInit = async () => {
     try {
       setLoading(true)
-      console.log(args, '  ===')
       const accountsMetaPubkey = convertStringDataToPubKey(accountsMeta)
       const instruction = await program.methods[ixSelected]
         .call(this, ...args)
@@ -30,7 +29,7 @@ const GenerateInstruction = () => {
 
       return setTxInstructions({ name: ixSelected, data: instruction })
     } catch (err) {
-      console.log(err, 'err')
+      console.log(err)
       return setTxInstructions()
     } finally {
       setLoading(false)

@@ -1,7 +1,14 @@
 import { Idl, web3, BN } from '@project-serum/anchor'
-import { IdlInstruction } from '@project-serum/anchor/dist/cjs/idl'
+import {
+  IdlInstruction,
+  IdlTypeDefTyStruct,
+} from '@project-serum/anchor/dist/cjs/idl'
 import { PublicKey } from '@solana/web3.js'
-import { AccountsMeta, ArgsMeta } from 'providers/parser.provider'
+import {
+  AccountsMeta,
+  ArgsMeta,
+  IDLParserState,
+} from 'providers/parser.provider'
 
 export const fileToBase64 = (
   file: File,
@@ -30,7 +37,7 @@ export class IdlParser {
         return `${type?.['array'][0]} [${type?.['array'][1]}]`
       return `${IdlParser.getTypeOfParam(type['array'])} []`
     }
-    return '-'
+    return type
   }
 }
 
@@ -48,71 +55,103 @@ export const convertStringDataToPubKey = (
   return nextDataPubKey
 }
 
+export const convertArgsByType = (
+  raw: string | string[],
+  type: any,
+  parser: IDLParserState,
+): any => {
+  const vecType = type['vec']
+  const definedType = type['defined']
+  const arrayType = type['array']
+  const isBoolType = type === 'bool'
+  const isPubkeyType = type === 'publicKey'
+  const isArrayData = Array.isArray(raw)
+  const isNumberType =
+    type === 'u8' ||
+    type === 'u16' ||
+    type === 'u32' ||
+    type === 'u64' ||
+    type === 'u128' ||
+    type === 'i8' ||
+    type === 'i16' ||
+    type === 'i32' ||
+    type === 'i64' ||
+    type === 'i128' ||
+    type === 'f32' ||
+    type === 'f64'
+
+  let typeIdlEnum = parser.idl?.types?.find((e) => e.name === type)
+  if (!typeIdlEnum)
+    typeIdlEnum = parser.idl?.accounts?.find((e) => e.name === type)
+
+  const isTypeIdlEnum = typeIdlEnum?.type.kind === 'enum'
+  const isTypeIdlStruct = typeIdlEnum?.type.kind === 'struct'
+
+  if (isArrayData)
+    return raw.map((item) => convertArgsByType(item, type, parser))
+
+  switch (true) {
+    case !!definedType:
+      return convertArgsByType(raw, definedType, parser)
+    case !!vecType:
+      return convertArgsByType(
+        raw
+          .toString()
+          .split(',')
+          .map((val) => val),
+        vecType,
+        parser,
+      )
+    case !!arrayType:
+      return convertArgsByType(
+        raw
+          .toString()
+          .split(',')
+          ?.map((val) => val),
+        arrayType[0],
+        parser,
+      )
+    case isPubkeyType:
+      return new PublicKey(raw)
+    case isBoolType:
+      return Boolean(raw)
+    case isNumberType:
+      return !!Number(raw) && Number(raw) % 2 === 0 ? new BN(raw) : new BN(0)
+    case isTypeIdlEnum:
+      return { [raw.substring(0, 1).toLowerCase() + raw.substring(1)]: {} }
+    case isTypeIdlStruct:
+      if (typeof raw === 'object') {
+        const nextRawData = JSON.parse(JSON.stringify(raw))
+        const typeIdlStruct = typeIdlEnum?.type as IdlTypeDefTyStruct
+        for (const { name, type } of typeIdlStruct.fields) {
+          console.log(name, nextRawData, nextRawData[name], 'asd 123')
+          if (!!nextRawData[name])
+            nextRawData[name] = convertArgsByType(
+              nextRawData[name],
+              type,
+              parser,
+            )
+          continue
+        }
+        console.log(nextRawData, 'next')
+        return nextRawData
+      }
+      return raw
+    default:
+      return raw
+  }
+}
+
 export const normalizeAnchorArgs = (
   data: ArgsMeta,
   instructionIdl: IdlInstruction,
+  parser: IDLParserState,
 ) => {
-  const normalizedArgs = Object.values(data).map((value, idx) => {
-    let paramType = IdlParser.getTypeOfParam(instructionIdl?.args[idx].type)
-    switch (paramType) {
-      case 'publicKey':
-        return new PublicKey(value)
-      case 'bool':
-        return JSON.parse(value)
-      case 'u64':
-      case 'u128':
-      case 'i64':
-      case 'i128':
-        return new BN(value)
-      case 'u8':
-      case 'u16':
-      case 'u32':
-      case 'i8':
-      case 'i16':
-      case 'i32':
-      case 'f32':
-      case 'f64':
-        return Number(value)
-      case 'bool []':
-        const separatedBoolean = value.split(',').map((value) => Boolean(value))
-        return separatedBoolean
-      case 'u64 []':
-      case 'u128 []':
-      case 'i64 []':
-      case 'i128 []':
-        const separatedBN = value.split(',').map((value) => new BN(value))
-        return separatedBN
-      case 'u8 []':
-      case 'u16 []':
-      case 'u32 []':
-      case 'i8 []':
-      case 'i16 []':
-      case 'i32 []':
-      case 'f32 []':
-      case 'f64 []':
-        const separatedNumber = value.split(',').map((value) => Number(value))
-        return separatedNumber
-      case 'Option<T>':
-        return value
-      case 'Enum':
-        return value
-      case 'Struct':
-        return value
-      case '[T; N]':
-      case 'Vec<T>':
-        const separatedValues = value.split(',')
-        return separatedValues
-      case 'String':
-        const pubKey = value.split(',').map((value) => new PublicKey(value))
-        return pubKey
-      case 'MintActionState []':
-        const actions = value.split(',').map((value) => value)
-        return actions
-      default:
-        return value
-    }
+  const nextInstruct = instructionIdl.args.map(({ name, type }) => {
+    const dataOfIndex = data[name]
+    if (dataOfIndex === undefined) return []
+    const nextData = convertArgsByType(dataOfIndex, type, parser)
+    return nextData
   })
-  return normalizedArgs
+  return nextInstruct
 }
-
-export const normalizeArg = (ixName?: string) => {}

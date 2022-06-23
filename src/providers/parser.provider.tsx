@@ -41,7 +41,6 @@ export type IDLParserState = {
   programAddress?: string
   ixSelected: string
   idl?: Idl
-  // instructionIdl?: IdlInstruction
   argsMetas: ArgsMetaState
   accountsMetas: AccountMetaState
   remainingAccounts: Record<string, AccountMetaAddress[]>

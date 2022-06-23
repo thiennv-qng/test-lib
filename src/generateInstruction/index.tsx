@@ -20,6 +20,7 @@ const GenerateInstruction = () => {
   const onInit = async () => {
     try {
       setLoading(true)
+      console.log(args, '  ===')
       const accountsMetaPubkey = convertStringDataToPubKey(accountsMeta)
       const instruction = await program.methods[ixSelected]
         .call(this, ...args)

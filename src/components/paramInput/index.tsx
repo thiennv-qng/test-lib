@@ -84,12 +84,12 @@ const ArgsInput = ({
   inputName = '',
   idlType,
 }: ArgsInputProps) => {
-  const isDefinedType = !!idlType['defined']
-  const isBoolType = idlType === 'bool'
+  const definedType = !!idlType['defined']
+  const boolType = idlType === 'bool'
 
-  if (isBoolType) return <BoolInput value={value} onChange={onChange} />
+  if (boolType) return <BoolInput value={value} onChange={onChange} />
 
-  if (isDefinedType)
+  if (definedType)
     return (
       <div className="flex flex-1 flex-row gap-4">
         <WrapInput
@@ -160,7 +160,6 @@ const ParamInput = ({
   }
 
   const isExist = !NORMAL_TYPES.includes(idlType.toString())
-
   return (
     <div>
       {idlType === 'publicKey' ? (

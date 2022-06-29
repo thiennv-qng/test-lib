@@ -94,14 +94,10 @@ export const convertArgsByType = (
     case !!definedType:
       return convertArgsByType(raw, definedType, parser)
     case !!vecType:
-      return convertArgsByType(
-        raw
-          .toString()
-          .split(',')
-          .map((val) => val),
-        vecType,
-        parser,
-      )
+      return raw
+        .toString()
+        .split(',')
+        .map((val) => convertArgsByType(val, vecType, parser))
     case !!arrayType:
       return convertArgsByType(
         raw
@@ -112,7 +108,11 @@ export const convertArgsByType = (
         parser,
       )
     case isPubkeyType:
-      return new PublicKey(raw)
+      try {
+        return new PublicKey(raw)
+      } catch (error) {
+        return raw
+      }
     case isBoolType:
       return Boolean(raw)
     case isNumberType:

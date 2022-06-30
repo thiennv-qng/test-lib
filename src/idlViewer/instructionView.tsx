@@ -69,23 +69,16 @@ export const InstructorArguments = () => {
   const { argsMetas, ixSelected } = parser || {}
   const idlInstruction = useIdlInstruction(ixSelected)
 
-  const parseStringArgsValue = (val: string) => {
-    try {
-      return JSON.parse(val)
-    } catch (error) {
-      return val
-    }
-  }
-
-  const onChange = (name: string, val: string) => {
-    let parsedVal = parseStringArgsValue(val)
-
-    return setArgsMeta({
-      instructName: ixSelected,
-      name,
-      val: parsedVal,
-    })
-  }
+  const onChange = useCallback(
+    (name: string, val: string) => {
+      return setArgsMeta({
+        instructName: ixSelected,
+        name,
+        val,
+      })
+    },
+    [ixSelected, setArgsMeta],
+  )
 
   if (!idlInstruction?.args.length) return <Empty />
   return (

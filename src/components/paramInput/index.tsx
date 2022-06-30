@@ -31,9 +31,15 @@ const NORMAL_TYPES = [
 type WrapInputProps = {
   idlType: any
   inputName: string
+  value?: string
   onChange: (value: string) => void
 }
-const WrapInput = ({ inputName, idlType, onChange }: WrapInputProps) => {
+const WrapInput = ({
+  value = '',
+  inputName,
+  idlType,
+  onChange,
+}: WrapInputProps) => {
   const { parser } = useParser()
   if (!parser.idl?.accounts) return null
 
@@ -52,6 +58,7 @@ const WrapInput = ({ inputName, idlType, onChange }: WrapInputProps) => {
   if (!!definedType) {
     return (
       <WrapInput
+        value={value}
         idlType={definedType}
         inputName={inputName}
         onChange={onChange}
@@ -59,7 +66,7 @@ const WrapInput = ({ inputName, idlType, onChange }: WrapInputProps) => {
     )
   }
 
-  return <DefinedInput name={idlType} onChange={onChange} />
+  return <DefinedInput name={idlType} value={value} onChange={onChange} />
 }
 
 type ArgsInputProps = {
@@ -93,6 +100,7 @@ const ArgsInput = ({
     return (
       <div className="flex flex-1 flex-row gap-4">
         <WrapInput
+          value={value}
           idlType={idlType}
           onChange={onChange}
           inputName={inputName}
@@ -159,7 +167,7 @@ const ParamInput = ({
     setVisible(false)
   }
 
-  const isExist = !NORMAL_TYPES.includes(idlType.toString())
+  const isExistIdlType = !NORMAL_TYPES.includes(idlType.toString())
   return (
     <div>
       {idlType === 'publicKey' ? (
@@ -176,7 +184,6 @@ const ParamInput = ({
               ({IdlParser.getTypeOfParam(idlType)})
             </Typography>
           </div>
-
           <ArgsInput
             value={value}
             onChange={onChange}
@@ -184,14 +191,14 @@ const ParamInput = ({
             onClick={() => setVisible(true)}
             onRemove={onRemove}
             acceptRemove={acceptRemove}
-            isExist={isExist}
+            isExist={isExistIdlType}
             idlType={idlType}
             inputName={name}
           />
         </div>
       )}
       {/* Advanced input */}
-      {!NORMAL_TYPES.includes(idlType.toString()) && (
+      {isExistIdlType && (
         <Modal
           visible={visible}
           onClose={() => setVisible(false)}
@@ -208,6 +215,7 @@ const ParamInput = ({
               {name}
             </Typography>
             <WrapInput
+              value={value}
               idlType={idlType}
               onChange={onChangeWrapInput}
               inputName={name}

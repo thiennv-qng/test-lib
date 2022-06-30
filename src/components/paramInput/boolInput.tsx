@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import Switch from 'components/switch'
 
 type BoolInputProps = {
@@ -5,8 +7,11 @@ type BoolInputProps = {
   value?: string
 }
 const BoolInput = ({ value, onChange }: BoolInputProps) => {
-  const checked =
-    value !== undefined && value !== '' ? JSON.parse(value) : false
+  const checked = value === 'true' ? true : false
+
+  useEffect(() => {
+    if (value === '' || value === undefined) onChange('false')
+  }, [onChange, value])
 
   return (
     <div className="p-4 rounded-[4px] shadow-[0_0_8px_#181c3630]">

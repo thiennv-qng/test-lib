@@ -70,15 +70,14 @@ export const convertArgsByType = (
     type === 'u8' ||
     type === 'u16' ||
     type === 'u32' ||
-    type === 'u64' ||
-    type === 'u128' ||
     type === 'i8' ||
     type === 'i16' ||
     type === 'i32' ||
-    type === 'i64' ||
-    type === 'i128' ||
     type === 'f32' ||
     type === 'f64'
+
+  const isBNType =
+    type === 'u64' || type === 'u128' || type === 'i64' || type === 'i128'
 
   let typeIdlEnum = parser.idl?.types?.find((e) => e.name === type)
   if (!typeIdlEnum)
@@ -114,9 +113,12 @@ export const convertArgsByType = (
         return raw
       }
     case isBoolType:
-      return Boolean(raw)
+      return raw === 'true' ? true : false
+    case isBNType:
+      const detectIntegerRegex = /^\d+$/
+      return detectIntegerRegex.test(raw) ? new BN(raw.toString()) : new BN(0)
     case isNumberType:
-      return !!Number(raw) && Number(raw) % 2 === 0 ? new BN(raw) : new BN(0)
+      return !!Number(raw) ? Number(raw) : 0
     case isTypeIdlEnum:
       return { [raw.substring(0, 1).toLowerCase() + raw.substring(1)]: {} }
     case isTypeIdlStruct:

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { IdlTypeDefTyStruct } from '@project-serum/anchor/dist/cjs/idl'
 
 import ParamInput from '../index'
@@ -12,13 +12,16 @@ const StructInput = ({
 }) => {
   const [structData, setStructData] = useState<Record<string, string>>({})
 
-  const onChangeStruct = (key: string, val: string) => {
-    const newData = { ...structData }
-    newData[key] = val
-    setStructData(newData)
+  const onChangeStruct = useCallback(
+    (key: string, val: string) => {
+      const newData = { ...structData }
+      newData[key] = val
+      setStructData(newData)
 
-    return onChange(JSON.stringify(newData))
-  }
+      return onChange(JSON.stringify(newData))
+    },
+    [onChange, structData],
+  )
 
   return (
     <div className="flex flex-col w-full p-4 gap-2 rounded-[4px] shadow-[0_0_8px_#181c3630]">

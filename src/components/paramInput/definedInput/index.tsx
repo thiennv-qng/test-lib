@@ -9,9 +9,11 @@ import EnumInput from './enumInput'
 import StructInput from './structInput'
 
 const DefinedInput = ({
+  value,
   name,
   onChange,
 }: {
+  value?: string
   name: string
   onChange: (val: string) => void
 }) => {
@@ -23,7 +25,7 @@ const DefinedInput = ({
 
   if (typeIdlEnum?.type.kind === 'enum') {
     const enumType = typeIdlEnum.type as IdlTypeDefTyEnum
-    return <EnumInput enumType={enumType} onChange={onChange} />
+    return <EnumInput enumType={enumType} value={value} onChange={onChange} />
   }
 
   if (typeIdlEnum?.type.kind === 'struct') {

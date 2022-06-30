@@ -1,26 +1,29 @@
+import { useCallback, useEffect } from 'react'
 import { IdlTypeDefTyEnum } from '@project-serum/anchor/dist/cjs/idl'
 
 import Select from 'components/select'
-import { useCallback, useEffect } from 'react'
 
 const EnumInput = ({
+  value = '',
   enumType,
   onChange,
 }: {
+  value?: string
   enumType: IdlTypeDefTyEnum
   onChange: (val: string) => void
 }) => {
   const onDefaultValue = useCallback(() => {
-    if (!enumType.variants.length) onChange(enumType.variants[0].name)
-  }, [enumType.variants, onChange])
+    if (value === undefined || value === '') onChange(enumType.variants[0].name)
+  }, [enumType.variants, onChange, value])
 
-  // Select the
+  // Select default enum type
   useEffect(() => {
     onDefaultValue()
   }, [onDefaultValue])
 
   return (
     <Select
+      value={value}
       onChange={(e) => onChange(e.target.value)}
       className="w-full p-[8px]"
     >

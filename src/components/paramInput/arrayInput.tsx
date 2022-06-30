@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { IdlType } from '@project-serum/anchor/dist/cjs/idl'
 
 import Button from '../button'
@@ -28,11 +28,14 @@ const ArrayInput = ({
     setValues(newValues)
   }
 
-  const onChangeValues = (idx: number, val: string) => {
-    const newValues = [...values]
-    newValues[idx] = val
-    setValues(newValues)
-  }
+  const onChangeValues = useCallback(
+    (idx: number, val: string) => {
+      const newValues = [...values]
+      newValues[idx] = val
+      setValues(newValues)
+    },
+    [values],
+  )
 
   const onOk = () => {
     const stringData = values.join(',')

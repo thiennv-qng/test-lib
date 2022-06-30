@@ -15,6 +15,7 @@ export const useArgs = (ixName: string): ArgsType => {
   const parserArgs = useCallback(() => {
     const args = argsMetas[ixName] || []
     const parsedArgs = normalizeAnchorArgs(args, idlInstruction, parser)
+    console.log(parsedArgs, '   <----')
     setArgs(parsedArgs)
   }, [argsMetas, idlInstruction, ixName, parser])
   useEffect(() => {

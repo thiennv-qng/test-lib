@@ -1,7 +1,8 @@
 export enum AddressCategory {
-  context = 'context',
-  system = 'system',
-  idl = 'idl',
-  token = 'token',
-  pda = 'pda',
+  context = 'Context',
+  system = 'System',
+  idl = 'Program Account Data',
+  token = 'Token Account',
+  pda = 'PDA',
+  suggest = 'Suggest',
 }

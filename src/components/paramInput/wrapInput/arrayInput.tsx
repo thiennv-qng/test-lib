@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { IdlType } from '@project-serum/anchor/dist/cjs/idl'
 
-import Button from '../../button'
+import Button from '../../ui/button'
 import ParamInput from '../index'
 
 type ArrayInputProps = {

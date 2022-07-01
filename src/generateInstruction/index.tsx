@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import Button from 'components/button'
+import Button from 'components/ui/button'
 import ViewTxInstructions from './viewTxInstructions'
 
 import { convertStringDataToPubKey } from 'helpers'

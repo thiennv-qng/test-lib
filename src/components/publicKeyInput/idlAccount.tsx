@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { web3 } from '@project-serum/anchor'
+
 import IonIcon from '@sentre/antd-ionicon'
-import Input from '../input'
-import Button, { Spinner } from '../button'
-import Empty from 'components/empty'
+import { Input, Button, Typography, Select, Empty } from 'components'
+import { Spinner } from '../ui/button'
 
 import { useParser } from '../../providers/parser.provider'
-import Typography from 'components/typography'
-import Select from 'components/select'
 import { useProgram } from 'hooks/useProgram'
 
 const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {

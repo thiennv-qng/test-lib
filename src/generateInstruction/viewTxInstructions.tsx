@@ -1,8 +1,8 @@
 import { Fragment } from 'react'
 
+import { Expand, Typography } from 'components'
+
 import { useParser } from 'providers/parser.provider'
-import Expand from 'components/expand'
-import Typography from 'components/typography'
 
 const ViewTxInstructions = () => {
   const { txInstructions } = useParser()

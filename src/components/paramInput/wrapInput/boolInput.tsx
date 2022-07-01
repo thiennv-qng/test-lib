@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import Switch from 'components/switch'
+import { Switch } from 'components'
 
 type BoolInputProps = {
   onChange: (val: string) => void

@@ -3,7 +3,7 @@ import { utils, web3 } from '@project-serum/anchor'
 import { account } from '@senswap/sen-js'
 
 import PublicKeyInput from './index'
-import Button from '../button'
+import Button from '../ui/button'
 
 const TokenAccount = ({ onChange }: { onChange: (val: string) => void }) => {
   const [mint, setMint] = useState('')

@@ -1,10 +1,10 @@
 import { Idl } from '@project-serum/anchor'
-import IonIcon from '@sentre/antd-ionicon'
 
-import Typography from '../components/typography'
+import IonIcon from '@sentre/antd-ionicon'
+import { Typography } from 'components'
+import ViewUploaded from './viewUploaded'
 
 import { useParser } from '../providers/parser.provider'
-import ViewUploaded from './viewUploaded'
 
 const UploadFIle = () => {
   const { uploadIdl, parser } = useParser()

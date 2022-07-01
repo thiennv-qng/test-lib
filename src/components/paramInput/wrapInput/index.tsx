@@ -1,7 +1,5 @@
 import IonIcon from '@sentre/antd-ionicon'
-import Button from 'components/button'
-import Input from 'components/input'
-import Typography from 'components/typography'
+import { Button, Typography, Input } from 'components'
 import BoolInput from './boolInput'
 import InitInput from '../initInput'
 

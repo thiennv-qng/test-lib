@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
+import { Modal, Button } from 'components'
 import TemplateView from '../idlViewer/templateView'
 import UploadFIle from './uploadFile'
 import ViewUploaded from './viewUploaded'
-import Modal from '../components/modal'
-import Button from 'components/button'
 import GenerateInstruction from 'generateInstruction'
 
 import { useParser } from '../providers/parser.provider'

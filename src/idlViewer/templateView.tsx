@@ -1,5 +1,6 @@
-import RadioButton from 'components/radioButton'
 import { useState } from 'react'
+
+import { RadioButton } from 'components'
 
 import { useParser } from '../providers/parser.provider'
 

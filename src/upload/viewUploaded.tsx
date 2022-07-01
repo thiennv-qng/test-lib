@@ -1,10 +1,9 @@
 import IonIcon from '@sentre/antd-ionicon'
 
-import Typography from '../components/typography'
+import { Typography, Tooltip } from 'components'
 import UploadFIle from './uploadFile'
 
 import { useParser } from '../providers/parser.provider'
-import Tooltip from 'components/tooltip'
 
 const UploadFileName = () => {
   const { parser } = useParser()

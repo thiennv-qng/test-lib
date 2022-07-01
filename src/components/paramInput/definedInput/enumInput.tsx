@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { IdlTypeDefTyEnum } from '@project-serum/anchor/dist/cjs/idl'
 
-import Select from 'components/select'
+import { Select } from 'components'
 
 const EnumInput = ({
   value = '',

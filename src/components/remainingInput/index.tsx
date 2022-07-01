@@ -1,10 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
-import Button from 'components/button'
-import Typography from 'components/typography'
-import Input from 'components/input'
-import Switch from 'components/switch'
+import { Button, Typography, Input, Switch } from 'components'
 
 import { AccountMetaAddress, useParser } from 'providers/parser.provider'
 

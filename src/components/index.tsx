@@ -2,17 +2,17 @@ import ParamInput from './paramInput'
 import PublicKeyInput from './publicKeyInput'
 
 // Ui
-import Button from './button'
-import Empty from './empty'
-import Expand from './expand'
-import Input from './input'
-import Modal from './modal'
-import RadioButton from './radioButton'
-import Segmented from './segmented'
-import Select from './select'
-import Switch from './switch'
-import Tooltip from './tooltip'
-import Typography from './typography'
+import Button from './ui/button'
+import Empty from './ui/empty'
+import Expand from './ui/expand'
+import Input from './ui/input'
+import Modal from './ui/modal'
+import RadioButton from './ui/radioButton'
+import Segmented from './ui/segmented'
+import Select from './ui/select'
+import Switch from './ui/switch'
+import Tooltip from './ui/tooltip'
+import Typography from './ui/typography'
 
 export {
   ParamInput,

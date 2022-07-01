@@ -5,10 +5,10 @@ import IonIcon from '@sentre/antd-ionicon'
 import { Input, Button, Typography, Select, Empty } from 'components'
 import { Spinner } from '../ui/button'
 
-import { useParser } from '../../providers/parser.provider'
+import { KeypairMeta, useParser } from 'providers/parser.provider'
 import { useProgram } from 'hooks/useProgram'
 
-const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
+const IdlAccount = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
   const [accountType, setAccountType] = useState('')
@@ -114,7 +114,7 @@ const IdlAccount = ({ onChange }: { onChange: (val: string) => void }) => {
                       <Button
                         type="text"
                         className="font-bold"
-                        onClick={() => onChange(val)}
+                        onClick={() => onChange({ publicKey: val })}
                       >
                         Select
                       </Button>

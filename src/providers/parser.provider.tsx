@@ -29,12 +29,12 @@ export type AccountMetaAddress = {
   isWritable: boolean
   address: string
 }
-export type AccountsMeta = {
+export type KeypairMeta = {
   publicKey: string
   privateKey?: string
 }
 export type ArgsMeta = Record<string, string>
-export type AccountMetaState = Record<string, AccountsMeta>
+export type AccountMetaState = Record<string, KeypairMeta>
 export type ArgsMetaState = Record<string, ArgsMeta>
 
 export type IDLParserState = {
@@ -50,7 +50,7 @@ export type SetArgsMetaState = {
   name: string
   val: string
 }
-export type SetAccountsMetaState = { name: string; data: AccountsMeta }
+export type SetAccountsMetaState = { name: string; data: KeypairMeta }
 export type SetRemainingAccounts = { name: string; data: AccountMetaAddress[] }
 export type ParserProvider = {
   parser: IDLParserState

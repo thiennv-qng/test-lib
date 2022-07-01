@@ -34,7 +34,7 @@ const ParamInput = ({
   if (idlType === 'publicKey')
     return (
       <PublicKeyInput
-        name={name}
+        accountName={name}
         onChange={(acc) => onChange(acc.publicKey)}
         value={value}
       />

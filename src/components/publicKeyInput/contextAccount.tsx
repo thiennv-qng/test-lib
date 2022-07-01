@@ -1,66 +1,68 @@
 import { web3 } from '@project-serum/anchor'
+import { Button, Input, Typography } from 'components'
 
-import { Button, Empty, Input, Typography } from 'components'
+import { KeypairMeta, useParser } from 'providers/parser.provider'
 
-import { useParser } from '../../providers/parser.provider'
+type ContextAccountProps = {
+  onChange: (value: KeypairMeta) => void
+}
 
-const ContextAccount = ({ onClick }: { onClick: (val: string) => void }) => {
+const ContextAccount = ({ onChange }: ContextAccountProps) => {
   const { parser, walletAddress } = useParser()
   const { accountsMetas: accountsMeta } = parser || {}
 
-  const onNewKeypair = () => {
-    const newKeypair = web3.Keypair.generate()
-    onClick(
-      newKeypair.publicKey.toBase58(),
-      // privateKey: Buffer.from(newKeypair.secretKey).toString('hex'),
-    )
+  const onCreateAccount = () => {
+    const keypair = web3.Keypair.generate()
+    onChange({
+      publicKey: keypair.publicKey.toBase58(),
+      privateKey: Buffer.from(keypair.secretKey).toString('hex'),
+    })
   }
 
   return (
     <div>
+      {walletAddress && (
+        <div>
+          <Button
+            onClick={() => onChange({ publicKey: walletAddress })}
+            block
+            disabled={!walletAddress}
+          >
+            Wallet Address
+          </Button>
+        </div>
+      )}
       <div>
-        <Button
-          onClick={() => onClick(walletAddress || '')}
-          block
-          disabled={!walletAddress}
-        >
-          Wallet Address
-        </Button>
-      </div>
-      <div>
-        <Button type="primary" onClick={onNewKeypair} block>
+        <Button type="primary" onClick={onCreateAccount} block>
           New Keypair
         </Button>
       </div>
-      {!Object.keys(accountsMeta).length ? (
-        <Empty />
-      ) : (
-        <div className="grid grid-cols-1 gap-4">
-          {Object.keys(accountsMeta).map((key, idx) => {
-            const val = accountsMeta?.[key].publicKey
-            return (
-              <div className="grid grid-cols-1 gap-1" key={idx}>
-                <Typography secondary>{key}</Typography>
-                <div className="flex flex-row gap-4">
-                  <Input
-                    className="flex-auto"
-                    value={val}
-                    onChange={() => {}}
-                    bordered={false}
-                  />
-                  <Button
-                    type="text"
-                    className="font-bold"
-                    onClick={() => onClick(val)}
-                  >
-                    Select
-                  </Button>
-                </div>
+
+      <div className="grid grid-cols-1 gap-4">
+        {Object.keys(accountsMeta).map((key, idx) => {
+          const val = accountsMeta?.[key].publicKey
+          return (
+            <div className="grid grid-cols-1 gap-1" key={idx}>
+              <Typography secondary>{key}</Typography>
+              <div className="flex flex-row gap-4">
+                <Input
+                  className="flex-auto"
+                  value={val}
+                  onChange={() => {}}
+                  bordered={false}
+                />
+                <Button
+                  type="text"
+                  className="font-bold"
+                  onClick={() => onChange({ publicKey: val })}
+                >
+                  Select
+                </Button>
               </div>
-            )
-          })}
-        </div>
-      )}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

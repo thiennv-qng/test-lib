@@ -4,8 +4,13 @@ import { account } from '@senswap/sen-js'
 
 import PublicKeyInput from './index'
 import Button from '../ui/button'
+import { KeypairMeta } from 'providers/parser.provider'
 
-const TokenAccount = ({ onChange }: { onChange: (val: string) => void }) => {
+const TokenAccount = ({
+  onChange,
+}: {
+  onChange: (val: KeypairMeta) => void
+}) => {
   const [mint, setMint] = useState('')
   const [owner, setOwner] = useState('')
   const [tokenAccount, setTokenAccount] = useState('')
@@ -34,12 +39,12 @@ const TokenAccount = ({ onChange }: { onChange: (val: string) => void }) => {
   return (
     <div className="flex flex-col gap-4">
       <PublicKeyInput
-        name="Mint"
+        accountName="Mint"
         value={mint}
         onChange={(e) => setMint(e.publicKey)}
       />
       <PublicKeyInput
-        name="Owner"
+        accountName="Owner"
         value={owner}
         onChange={(e) => setOwner(e.publicKey)}
       />
@@ -47,7 +52,7 @@ const TokenAccount = ({ onChange }: { onChange: (val: string) => void }) => {
       {tokenAccount && <div>Address: {tokenAccount}</div>}
       <Button
         type="primary"
-        onClick={() => onChange(tokenAccount)}
+        onClick={() => onChange({ publicKey: tokenAccount })}
         disabled={!tokenAccount}
         block
       >

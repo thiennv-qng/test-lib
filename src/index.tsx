@@ -4,8 +4,6 @@ import ReactDOM from 'react-dom/client'
 import reportWebVitals from './reportWebVitals'
 import './index.css'
 
-import './index.css'
-import 'idl-parser/index.css'
 import Wrapper from 'wrapper'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)

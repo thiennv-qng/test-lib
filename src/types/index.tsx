@@ -4,5 +4,5 @@ export enum AddressCategory {
   idl = 'Program Account Data',
   token = 'Token Account',
   pda = 'PDA',
-  suggest = 'Suggest',
+  input = 'input',
 }

@@ -2,7 +2,7 @@ import { Idl, web3, BN } from '@project-serum/anchor'
 import { IdlInstruction, IdlType } from '@project-serum/anchor/dist/cjs/idl'
 import { PublicKey } from '@solana/web3.js'
 import {
-  AccountsMeta,
+  KeypairMeta,
   ArgsMeta,
   IDLParserState,
 } from 'providers/parser.provider'
@@ -39,7 +39,7 @@ export class IdlParser {
 }
 
 export const convertStringDataToPubKey = (
-  data: Record<string, string | AccountsMeta>,
+  data: Record<string, string | KeypairMeta>,
 ): Record<string, PublicKey> => {
   if (!data) throw new Error('Valid data')
   const nextDataPubKey: Record<string, PublicKey> = {}

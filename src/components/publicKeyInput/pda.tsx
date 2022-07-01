@@ -5,9 +5,9 @@ import { account } from '@senswap/sen-js'
 import { Button, Typography } from 'components'
 import PubicKeyInput from './index'
 
-import { useParser } from 'providers/parser.provider'
+import { KeypairMeta, useParser } from 'providers/parser.provider'
 
-const Pda = ({ onChange }: { onChange: (val: string) => void }) => {
+const Pda = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
   const [seeds, setSeeds] = useState<string[]>([])
   const [pdaAddress, setPdaAddress] = useState('')
   const { parser } = useParser()
@@ -58,10 +58,9 @@ const Pda = ({ onChange }: { onChange: (val: string) => void }) => {
             return (
               <PubicKeyInput
                 value={val}
-                name={'Seed ' + (idx + 1)}
+                accountName={'Seed ' + (idx + 1)}
                 onChange={(val) => onChangeInput(idx, val.publicKey)}
                 onRemove={() => onRemove(idx)}
-                acceptRemove
                 key={idx}
               />
             )
@@ -72,7 +71,7 @@ const Pda = ({ onChange }: { onChange: (val: string) => void }) => {
         {!!seeds.length && (
           <Button
             type="primary"
-            onClick={() => onChange(pdaAddress)}
+            onClick={() => onChange({ publicKey: pdaAddress })}
             disabled={!pdaAddress}
             block
           >

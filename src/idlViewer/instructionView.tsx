@@ -11,7 +11,6 @@ import RemainingInput from 'components/remainingInput'
 
 import { useParser } from '../providers/parser.provider'
 import { useIdlInstruction } from 'hooks/useIdlInstruction'
-import { AddressCategory } from '../types'
 
 enum Tabs {
   Accounts = 'accounts',
@@ -20,29 +19,8 @@ enum Tabs {
 
 export const InstructorAccounts = () => {
   const { parser, setAccountsMeta } = useParser()
-  const { accountsMetas: accountsMeta, idl, ixSelected } = parser || {}
+  const { accountsMetas: accountsMeta, ixSelected } = parser || {}
   const idlInstruction = useIdlInstruction(ixSelected)
-
-  const findDefaultCategory = useCallback(
-    (accountName: string) => {
-      if (!idl) return
-      const name = accountName.toLowerCase()
-      // Check IDL accounts type
-      if (idl.accounts) {
-        for (const accountType of idl.accounts) {
-          for (const field of accountType.type.fields) {
-            if (name.includes(field.name.toLowerCase()))
-              return AddressCategory.idl
-          }
-        }
-      }
-      if (name.includes('program')) return AddressCategory.system
-      if (name.includes('tokenaccount') || name.includes('associated'))
-        return AddressCategory.token
-      return AddressCategory.system
-    },
-    [idl],
-  )
 
   if (!idlInstruction?.accounts.length) return <Empty />
   return (
@@ -54,10 +32,9 @@ export const InstructorAccounts = () => {
             onChange={(accData) =>
               setAccountsMeta({ name: account.name, data: accData })
             }
-            name={account.name}
+            accountName={account.name}
             value={accountsMeta[account.name]?.publicKey}
             key={idx}
-            defaultCategory={findDefaultCategory(account.name)}
           />
         ))}
       </div>

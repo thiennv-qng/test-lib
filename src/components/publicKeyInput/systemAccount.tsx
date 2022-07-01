@@ -1,4 +1,5 @@
 import { utils, web3 } from '@project-serum/anchor'
+import { KeypairMeta } from 'providers/parser.provider'
 import Button from '../ui/button'
 
 const SYSTEM_ACCOUNTS = [
@@ -8,14 +9,18 @@ const SYSTEM_ACCOUNTS = [
   { name: 'associatedTokenProgram', value: utils.token.ASSOCIATED_PROGRAM_ID },
 ]
 
-const SystemAccount = ({ onChange }: { onChange: (val: string) => void }) => {
+const SystemAccount = ({
+  onChange,
+}: {
+  onChange: (val: KeypairMeta) => void
+}) => {
   return (
     <div className="grid grid-cols-2 gap-4">
       {SYSTEM_ACCOUNTS.map((account, idx) => (
         <div key={idx}>
           <Button
             type="primary"
-            onClick={() => onChange(account.value.toBase58())}
+            onClick={() => onChange({ publicKey: account.value.toBase58() })}
             block
           >
             {account.name}

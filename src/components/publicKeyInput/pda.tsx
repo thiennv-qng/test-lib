@@ -25,15 +25,13 @@ const Pda = ({ onChange }: { onChange: (val: string) => void }) => {
   }
 
   const onChangeInput = async (idx: number, val: string) => {
-    if (!account.isAddress(programAddress)) return
     const newSeed = [...seeds]
     newSeed[idx] = val
     setSeeds(newSeed)
   }
 
   const deriveNewPDAAddress = useCallback(async () => {
-    if (!seeds.length) return setPdaAddress('')
-
+    if (!seeds.length || !programAddress) return setPdaAddress('')
     const [pdaAddress] = await web3.PublicKey.findProgramAddress(
       seeds.map((val) => {
         if (account.isAddress(val)) return new web3.PublicKey(val).toBuffer()

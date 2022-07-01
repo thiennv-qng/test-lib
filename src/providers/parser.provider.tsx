@@ -163,9 +163,8 @@ const IDLParserContextProvider = ({
   )
   const setTxInstructions = useCallback(
     (args?: SetExportTxInstruction) => {
-      let nextData: Record<string, TransactionInstruction> = JSON.parse(
-        JSON.stringify(txInstruct),
-      )
+      let nextData: Record<string, TransactionInstruction> =
+        Object.assign(txInstruct)
       if (!!args) {
         const { name, data } = args
         nextData[name] = data

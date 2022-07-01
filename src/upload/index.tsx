@@ -42,7 +42,7 @@ const UploadIdl = () => {
         <div className="grid grid-cols-1 gap-8">
           <div className="grid xs:grid-cols-1 md:grid-cols-2 gap-6 min-h-[300px]">
             <div className="flex flex-col gap-8 p-4 bg-[#EBEBEB]">
-              <ViewUploaded />
+              <ViewUploaded acceptViewProgramAddr />
               <TemplateView />
             </div>
             <InstructionView />

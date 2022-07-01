@@ -1,8 +1,5 @@
 import { Idl, web3, BN } from '@project-serum/anchor'
-import {
-  IdlInstruction,
-  IdlTypeDefTyStruct,
-} from '@project-serum/anchor/dist/cjs/idl'
+import { IdlInstruction, IdlType } from '@project-serum/anchor/dist/cjs/idl'
 import { PublicKey } from '@solana/web3.js'
 import {
   AccountsMeta,
@@ -55,90 +52,67 @@ export const convertStringDataToPubKey = (
   return nextDataPubKey
 }
 
+// https://book.anchor-lang.com/anchor_references/javascript_anchor_types_reference.html
 export const convertArgsByType = (
-  raw: string | string[],
-  type: any,
+  value: string,
+  type: IdlType,
   parser: IDLParserState,
 ): any => {
-  const vecType = type['vec']
-  const definedType = type['defined']
-  const arrayType = type['array']
-  const isBoolType = type === 'bool'
-  const isPubkeyType = type === 'publicKey'
-  const isArrayData = Array.isArray(raw)
-  const isNumberType =
-    type === 'u8' ||
-    type === 'u16' ||
-    type === 'u32' ||
-    type === 'i8' ||
-    type === 'i16' ||
-    type === 'i32' ||
-    type === 'f32' ||
-    type === 'f64'
+  if (typeof type === 'string') {
+    if (type === 'bool') return value === 'true'
 
-  const isBNType =
-    type === 'u64' || type === 'u128' || type === 'i64' || type === 'i128'
+    if (type === 'publicKey') return new PublicKey(value)
 
-  let typeIdlEnum = parser.idl?.types?.find((e) => e.name === type)
-  if (!typeIdlEnum)
-    typeIdlEnum = parser.idl?.accounts?.find((e) => e.name === type)
+    if (['u64', 'u128', 'i64', 'i128'].includes(type.toString()))
+      return new BN(value)
 
-  const isTypeIdlEnum = typeIdlEnum?.type.kind === 'enum'
-  const isTypeIdlStruct = typeIdlEnum?.type.kind === 'struct'
+    if (['u8', 'u16', 'u32', 'i8', 'i16', 'i32'].includes(type))
+      return Number(value)
 
-  if (isArrayData)
-    return raw.map((item) => convertArgsByType(item, type, parser))
+    if (['f32', 'f64'].includes(type.toString())) return Number(value)
 
-  switch (true) {
-    case !!definedType:
-      return convertArgsByType(raw, definedType, parser)
-    case !!vecType:
-      return raw
-        .toString()
-        .split(',')
-        .map((val) => convertArgsByType(val, vecType, parser))
-    case !!arrayType:
-      return convertArgsByType(
-        raw
-          .toString()
-          .split(',')
-          ?.map((val) => val),
-        arrayType[0],
-        parser,
-      )
-    case isPubkeyType:
-      try {
-        return new PublicKey(raw)
-      } catch (error) {
-        return raw
+    throw new Error('Invalid type' + type)
+  }
+
+  // Advanced type
+  if ('option' in type) {
+    const elementType = type['option']
+    if (!value) return null
+    return convertArgsByType(value, elementType, parser)
+  }
+  if ('array' in type) {
+    const elementType = type['array']
+    const listValue = value.split(',')
+    return listValue.map((val) =>
+      convertArgsByType(val, elementType[0], parser),
+    )
+  }
+  if ('vec' in type) {
+    const elementType = type['vec']
+    const listValue = value.split(',')
+    return listValue.map((val) => convertArgsByType(val, elementType, parser))
+  }
+  if ('defined' in type) {
+    const elementType = type['defined']
+    const definedTypes = parser.idl?.types || []
+    const definedType = definedTypes.find((e) => e.name === elementType)
+    if (!definedType) throw new Error('Invalid type' + type)
+    // Enum
+    if (definedType.type.kind === 'enum')
+      return { [value.substring(0, 1).toLowerCase() + value.substring(1)]: {} }
+    // Struct
+    if (definedType.type.kind === 'struct') {
+      const structData: { [x: string]: any } = {}
+      const valueObject = JSON.parse(JSON.stringify(value))
+      for (const field of definedType.type.fields) {
+        structData[field.name] = convertArgsByType(
+          valueObject[field.name],
+          type,
+          parser,
+        )
       }
-    case isBoolType:
-      return raw === 'true' ? true : false
-    case isBNType:
-      const detectIntegerRegex = /^\d+$/
-      return detectIntegerRegex.test(raw) ? new BN(raw.toString()) : new BN(0)
-    case isNumberType:
-      return !!Number(raw) ? Number(raw) : 0
-    case isTypeIdlEnum:
-      return { [raw.substring(0, 1).toLowerCase() + raw.substring(1)]: {} }
-    case isTypeIdlStruct:
-      if (typeof raw === 'object') {
-        const nextRawData = JSON.parse(JSON.stringify(raw))
-        const typeIdlStruct = typeIdlEnum?.type as IdlTypeDefTyStruct
-        for (const { name, type } of typeIdlStruct.fields) {
-          if (!!nextRawData[name])
-            nextRawData[name] = convertArgsByType(
-              nextRawData[name],
-              type,
-              parser,
-            )
-          continue
-        }
-        return nextRawData
-      }
-      return raw
-    default:
-      return raw
+      return structData
+    }
   }
 }
 

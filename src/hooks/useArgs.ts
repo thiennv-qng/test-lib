@@ -14,8 +14,12 @@ export const useArgs = (ixName: string): ArgsType => {
 
   const parserArgs = useCallback(() => {
     const args = argsMetas[ixName] || []
-    const parsedArgs = normalizeAnchorArgs(args, idlInstruction, parser)
-    setArgs(parsedArgs)
+    try {
+      const parsedArgs = normalizeAnchorArgs(args, idlInstruction, parser)
+      setArgs(parsedArgs)
+    } catch (error) {
+      console.log('error', error)
+    }
   }, [argsMetas, idlInstruction, ixName, parser])
   useEffect(() => {
     parserArgs()

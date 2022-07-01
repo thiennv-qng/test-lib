@@ -2,11 +2,12 @@ import {
   IdlTypeDefTyEnum,
   IdlTypeDefTyStruct,
 } from '@project-serum/anchor/dist/cjs/idl'
-import Typography from 'components/typography'
-import { useParser } from '../../../providers/parser.provider'
 
+import { Typography } from 'components'
 import EnumInput from './enumInput'
 import StructInput from './structInput'
+
+import { useParser } from 'providers/parser.provider'
 
 const DefinedInput = ({
   value,

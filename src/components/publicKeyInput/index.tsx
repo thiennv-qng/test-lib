@@ -12,11 +12,11 @@ import { AccountsMeta } from 'providers/parser.provider'
 import { AddressCategory } from 'types'
 
 export const SELECT_SYSTEM = [
-  AddressCategory.context,
   AddressCategory.idl,
-  AddressCategory.pda,
-  AddressCategory.system,
   AddressCategory.token,
+  AddressCategory.pda,
+  AddressCategory.context,
+  AddressCategory.system,
 ]
 
 type ModalViewProps = {

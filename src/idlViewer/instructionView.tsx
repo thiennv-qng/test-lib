@@ -1,10 +1,17 @@
 import { useCallback, useState } from 'react'
-import { PublicKeyInput, ParamInput, Empty, Segmented } from '../components'
-import { useParser } from '../providers/parser.provider'
-import { AddressCategory } from '../types'
-import Typography from 'components/typography'
+
+import {
+  PublicKeyInput,
+  ParamInput,
+  Empty,
+  Segmented,
+  Typography,
+} from '../components'
 import RemainingInput from 'components/remainingInput'
+
+import { useParser } from '../providers/parser.provider'
 import { useIdlInstruction } from 'hooks/useIdlInstruction'
+import { AddressCategory } from '../types'
 
 enum Tabs {
   Accounts = 'accounts',

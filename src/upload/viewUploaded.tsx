@@ -2,9 +2,8 @@ import { useRef, useState } from 'react'
 import { account } from '@senswap/sen-js'
 
 import IonIcon from '@sentre/antd-ionicon'
-import Typography from '../components/typography'
 import UploadFIle from './uploadFile'
-import { Input } from 'components'
+import { Input, Typography } from 'components'
 
 import { useParser } from '../providers/parser.provider'
 

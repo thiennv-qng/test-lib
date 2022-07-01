@@ -1,4 +1,4 @@
-import Typography from 'components/typography'
+import { Typography } from 'components'
 import UploadIdl from 'upload'
 
 const App = () => {

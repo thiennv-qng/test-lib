@@ -4,10 +4,10 @@ import IonIcon from '@sentre/antd-ionicon'
 import { Idl } from '@project-serum/anchor'
 
 import ViewUploaded from './viewUploaded'
-import Typography from '../components/typography'
 
 import { IdlParser } from 'helpers'
 import { useParser } from '../providers/parser.provider'
+import { Typography } from 'components'
 
 const UploadFIle = () => {
   const {

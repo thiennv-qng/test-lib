@@ -6,7 +6,7 @@ import {
   ReactNode,
 } from 'react'
 
-import '../index.css'
+import 'index.css'
 
 type TypographyLevel = 1 | 2 | 3 | 4 | 5
 type TypographyProps = {

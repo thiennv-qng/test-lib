@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { web3 } from '@project-serum/anchor'
 import { account } from '@senswap/sen-js'
 
+import { Button, Typography } from 'components'
 import PubicKeyInput from './index'
-import Button from '../button'
+
 import { useParser } from 'providers/parser.provider'
-import Typography from 'components/typography'
 
 const Pda = ({ onChange }: { onChange: (val: string) => void }) => {
   const [seeds, setSeeds] = useState<string[]>([])

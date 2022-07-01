@@ -14,8 +14,8 @@ const DEFAULT_IDL_PROGRAM_ADDRESS =
 
 export const useProgram = () => {
   const provider = useProvider()
-  const { parser } = useParser()
-  const { idl = DEFAULT_IDL, programAddress } = parser
+  const { parser, programAddress } = useParser()
+  const { idl = DEFAULT_IDL } = parser
 
   let paramProgramAddr = !!programAddress
     ? programAddress

@@ -11,8 +11,7 @@ import {
   useMemo,
 } from 'react'
 import { Idl, web3 } from '@project-serum/anchor'
-
-import { IdlParser } from '../helpers'
+import { account } from '@senswap/sen-js'
 
 const Context = createContext<ParserProvider>({} as ParserProvider)
 
@@ -38,7 +37,6 @@ export type AccountMetaState = Record<string, AccountsMeta>
 export type ArgsMetaState = Record<string, ArgsMeta>
 
 export type IDLParserState = {
-  programAddress?: string
   ixSelected: string
   idl?: Idl
   argsMetas: ArgsMetaState
@@ -53,6 +51,7 @@ export type SetArgsMetaState = {
 export type SetAccountsMetaState = { name: string; data: AccountsMeta }
 export type SetRemainingAccounts = { name: string; data: AccountMetaAddress[] }
 export type ParserProvider = {
+  programAddress?: string
   parser: IDLParserState
   setInstruction: (instruc: string) => void
   uploadIdl: (idl: Idl) => void
@@ -64,10 +63,10 @@ export type ParserProvider = {
   walletAddress?: string
   txInstructions?: Record<string, TransactionInstruction>
   setRemainingAccouts: (args: SetRemainingAccounts) => void
+  setProgramAddress: (programAddress: string) => void
 }
 
 const DEFAULT_PARSER_IDL: IDLParserState = {
-  programAddress: '',
   ixSelected: '',
   idl: undefined,
   argsMetas: {},
@@ -79,24 +78,25 @@ type IDLContextProviderProps = {
   children: ReactNode
   connection: string
   walletAddress?: string
+  programAddress?: string
 }
 
 const IDLParserContextProvider = ({
   children,
   connection,
   walletAddress,
+  programAddress,
 }: IDLContextProviderProps) => {
   const [parserData, setParserData] = useState<IDLParserState>(
     DEFAULT_PARSER_IDL as IDLParserState,
   )
   const [txInstruct, setTxInstruct] = useState({})
+  const [stateProgramAddr, setStateProgramAddr] = useState(programAddress)
 
   const uploadIdl = useCallback(
     (idl: Idl) => {
       const nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
-      const programAddress = IdlParser.getProgramAddress(idl)
       nextData.idl = idl
-      nextData.programAddress = programAddress
       return setParserData({ ...nextData })
     },
     [parserData],
@@ -173,9 +173,23 @@ const IDLParserContextProvider = ({
     [txInstruct],
   )
 
+  const setProgramAddress = useCallback(
+    (address) => {
+      let newProgramAddr = programAddress
+      if (account.isAddress(address)) newProgramAddr = address
+
+      return setStateProgramAddr(newProgramAddr)
+    },
+    [programAddress],
+  )
+
   const provider = useMemo(
     () => ({
       parser: parserData,
+      txInstructions: txInstruct,
+      connection,
+      walletAddress,
+      programAddress: stateProgramAddr,
       setInstruction: selectInstruction,
       uploadIdl,
       setArgsMeta,
@@ -183,12 +197,14 @@ const IDLParserContextProvider = ({
       removeIdl,
       setTxInstructions,
       setRemainingAccouts,
-      txInstructions: txInstruct,
-      connection,
-      walletAddress,
+      setProgramAddress,
     }),
     [
       parserData,
+      txInstruct,
+      connection,
+      walletAddress,
+      stateProgramAddr,
       selectInstruction,
       uploadIdl,
       setArgsMeta,
@@ -196,9 +212,7 @@ const IDLParserContextProvider = ({
       removeIdl,
       setTxInstructions,
       setRemainingAccouts,
-      txInstruct,
-      connection,
-      walletAddress,
+      setProgramAddress,
     ],
   )
 

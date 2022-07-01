@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { PublicKeyInput, ParamInput, Empty, Segmented } from '../components'
 import { useParser } from '../providers/parser.provider'
-import { AddressCategory } from '../constants'
+import { AddressCategory } from '../types'
 import Typography from 'components/typography'
 import RemainingInput from 'components/remainingInput'
 import { useIdlInstruction } from 'hooks/useIdlInstruction'

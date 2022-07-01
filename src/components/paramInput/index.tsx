@@ -1,18 +1,14 @@
 import { useState } from 'react'
 import { IdlType } from '@project-serum/anchor/dist/cjs/idl'
 
+import IonIcon from '@sentre/antd-ionicon'
+import { PublicKeyInput, Modal, Input, Button, Typography } from 'components'
 import DefinedInput from './definedInput'
 import ArrayInput from './arrayInput'
-import Modal from '../modal'
-import Input from '../input'
-import Button from '../button'
-import Typography from 'components/typography'
-import PublicKeyInput from 'components/publicKeyInput'
+import BoolInput from './boolInput'
 
 import { useParser } from '../../providers/parser.provider'
 import { IdlParser } from 'helpers'
-import IonIcon from '@sentre/antd-ionicon'
-import BoolInput from './boolInput'
 
 const NORMAL_TYPES = [
   'u8',

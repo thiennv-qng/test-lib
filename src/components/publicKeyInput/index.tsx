@@ -1,19 +1,15 @@
 import { useState } from 'react'
 
+import IonIcon from '@sentre/antd-ionicon'
 import SystemAccount from './systemAccount'
 import ContextAccount from './contextAccount'
 import IdlAccount from './idlAccount'
 import TokenAccount from './tokenAccount'
 import Pda from './pda'
-import Modal from '../modal'
-import Input from '../input'
-import Button from '../button'
+import { Modal, Input, Button, Select, Typography } from 'components'
 
-import { AccountsMeta } from '../../providers/parser.provider'
-import { AddressCategory } from '../../constants'
-import Typography from 'components/typography'
-import Select from 'components/select'
-import IonIcon from '@sentre/antd-ionicon'
+import { AccountsMeta } from 'providers/parser.provider'
+import { AddressCategory } from 'types'
 
 export const SELECT_SYSTEM = [
   AddressCategory.context,
@@ -24,19 +20,19 @@ export const SELECT_SYSTEM = [
 ]
 
 type ModalViewProps = {
-  selected: string
+  inputType: string
   onChange: (val: string) => void
 }
 
-const ModalView = ({ selected, onChange }: ModalViewProps) => {
-  switch (true) {
-    case selected === AddressCategory.context:
+const ModalView = ({ inputType, onChange }: ModalViewProps) => {
+  switch (inputType) {
+    case AddressCategory.context:
       return <ContextAccount onClick={onChange} />
-    case selected === AddressCategory.idl:
+    case AddressCategory.idl:
       return <IdlAccount onChange={onChange} />
-    case selected === AddressCategory.system:
+    case AddressCategory.system:
       return <SystemAccount onChange={onChange} />
-    case selected === AddressCategory.token:
+    case AddressCategory.token:
       return <TokenAccount onChange={onChange} />
     default:
       return <Pda onChange={onChange} />
@@ -121,7 +117,7 @@ const PublicKeyInput = ({
           <Typography level={5} className="capitalize font-bold">
             {name}
           </Typography>
-          <ModalView selected={category} onChange={onChangePublicKey} />
+          <ModalView inputType={category} onChange={onChangePublicKey} />
         </div>
       </Modal>
     </div>

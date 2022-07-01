@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
 import { IdlType } from '@project-serum/anchor/dist/cjs/idl'
 
-import Button from '../button'
-import ParamInput from './index'
+import Button from '../../button'
+import ParamInput from '../index'
 
 type ArrayInputProps = {
   idlType: IdlType
@@ -57,7 +57,6 @@ const ArrayInput = ({
             value={val}
             onChange={(data) => onChangeValues(idx, data)}
             onRemove={() => onRemove(idx)}
-            acceptRemove
             key={idx}
           />
         )

@@ -1,4 +1,4 @@
-import { Idl, Program } from '@project-serum/anchor'
+import { Idl, Program, web3 } from '@project-serum/anchor'
 
 import { useParser } from 'providers/parser.provider'
 import { useMemo } from 'react'
@@ -9,8 +9,7 @@ const DEFAULT_IDL: Idl = {
   name: 'DEFAULT_IDL',
   instructions: [],
 }
-const DEFAULT_IDL_PROGRAM_ADDRESS =
-  'Hxzy3cvdPz48RodavEN4P41TZp4g6Vd1kEMaUiZMof1u'
+const DEFAULT_IDL_PROGRAM_ADDRESS = web3.Keypair.generate().publicKey
 
 export const useProgram = () => {
   const provider = useProvider()

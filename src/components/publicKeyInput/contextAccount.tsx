@@ -22,7 +22,7 @@ const ContextAccount = ({ onChange }: ContextAccountProps) => {
   return (
     <div>
       {walletAddress && (
-        <div>
+        <div className="grid grid-cols-2 gap-4">
           <Button
             onClick={() => onChange({ publicKey: walletAddress })}
             block
@@ -30,13 +30,11 @@ const ContextAccount = ({ onChange }: ContextAccountProps) => {
           >
             Wallet Address
           </Button>
+          <Button type="primary" onClick={onCreateAccount} block>
+            New Keypair
+          </Button>
         </div>
       )}
-      <div>
-        <Button type="primary" onClick={onCreateAccount} block>
-          New Keypair
-        </Button>
-      </div>
 
       <div className="grid grid-cols-1 gap-4">
         {Object.keys(accountsMeta).map((key, idx) => {

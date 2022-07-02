@@ -51,7 +51,7 @@ type PubicKeyInputProps = {
 const PublicKeyInput = ({
   accountName,
   value,
-  placeholder = 'Input or select your types',
+  placeholder = '',
   onChange,
   onRemove,
 }: PubicKeyInputProps) => {
@@ -72,11 +72,16 @@ const PublicKeyInput = ({
     setVisible(false)
   }
 
+  const onSelectCategory = (category: AddressCategory) => {
+    setCategory(category)
+    setVisible(true)
+  }
+
   if (!category) return null
 
   return (
-    <div className="flex flex-col">
-      <Typography className="capitalize text-gray-400">
+    <div className="flex flex-col gap-[6px]">
+      <Typography className="capitalize text-gray-600">
         {accountName}
       </Typography>
       <div className="flex flex-nowrap gap-[16px]">
@@ -95,7 +100,7 @@ const PublicKeyInput = ({
         <Select
           style={{ minWidth: 120 }}
           value={category}
-          onChange={(e) => setCategory(e.target.value as AddressCategory)}
+          onChange={(e) => onSelectCategory(e.target.value as AddressCategory)}
         >
           {SELECT_SYSTEM.map((item, idx) => (
             <option

@@ -47,7 +47,7 @@ const ParamInput = ({
     <div>
       <div className="grid gird-cols-1 gap-1">
         <div className="flex flex-row gap-2">
-          <Typography className="capitalize text-gray-400">{name}</Typography>
+          <Typography className="capitalize text-gray-600">{name}</Typography>
           <Typography secondary>
             ({IdlParser.getTypeOfParam(idlType)})
           </Typography>

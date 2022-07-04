@@ -8,6 +8,8 @@ import { Spinner } from '../ui/button'
 import { KeypairMeta, useParser } from 'providers/parser.provider'
 import { useProgram } from 'hooks/useProgram'
 
+const Cache: { [x: string]: any } = {}
+
 const IdlAccount = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
@@ -25,9 +27,15 @@ const IdlAccount = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
       if (!program || !accountType || !address) return
       const accountPublicKey = new web3.PublicKey(address)
 
-      const accountData = await program.account[
-        accountType.toLowerCase()
-      ].fetch(accountPublicKey)
+      const key = `${accountType.toLowerCase()}:${accountPublicKey.toBase58()}`
+
+      if (Cache[key]) {
+        var accountData = await Cache[key]
+      } else {
+        Cache[key] =
+          program.account[accountType.toLowerCase()].fetch(accountPublicKey)
+        accountData = await Cache[key]
+      }
 
       const newIdlAccountData: Record<string, string[]> = {}
       for (const key in accountData) {

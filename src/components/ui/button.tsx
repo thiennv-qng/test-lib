@@ -24,9 +24,12 @@ const BUTTON_TYPE: Record<ButtonTypes, CSSProperties> = {
   primary: { borderStyle: 'solid', borderRadius: BORDER_RADIUS },
 }
 
-export const Spinner = ({ size = 24 }: Partial<ButtonProps>) => {
+export const Spinner = ({ size = 24, className }: Partial<ButtonProps>) => {
   return (
-    <div style={{ width: size, height: size }}>
+    <div
+      style={{ width: size, height: size, stroke: '#cbd5e1' }}
+      className={className}
+    >
       <svg className="spinner" viewBox="0 0 50 50">
         <circle
           className="path"

@@ -4,10 +4,10 @@ import IonIcon from '@sentre/antd-ionicon'
 import { Idl } from '@project-serum/anchor'
 
 import ViewUploaded from './viewUploaded'
+import { Empty, Typography } from 'components'
 
 import { IdlParser } from 'helpers'
 import { useParser } from '../providers/parser.provider'
-import { Typography } from 'components'
 
 const UploadFIle = () => {
   const { uploadIdl, parser, setProgramAddress, programAddresses } = useParser()
@@ -41,22 +41,25 @@ const UploadFIle = () => {
   if (!!idl) return <ViewUploaded />
 
   return (
-    <div className="relative border border-dashed border-[#B3B3B3] rounded-[8px] p-[24px] bg-[#0000000d]">
-      <label>
-        <input
-          type="file"
-          accept=".json"
-          onChange={(e) => upload(e.target.files)}
-          className="absolute opacity-0 w-full h-full top-0 left-0 z-10 cursor-pointer"
-        />
-        <div className="flex flex-col items-center">
-          <div className="w-[24px] mb-[8px] text-[24px]">
+    <div className="flex flex-col gap-10">
+      <div className="flex border border-dashed border-[#B3B3B3] rounded-[8px] bg-[#0000000d] text-[16px]">
+        <label className="flex flex-col w-full p-4 cursor-pointer">
+          <input
+            type="file"
+            accept=".json"
+            onChange={(e) => upload(e.target.files)}
+            className="opacity-0 w-0 h-0"
+          />
+          <div className="flex w-full justify-between items-center gap-4">
+            <div className="flex flex-auto gap-2">
+              <Typography>Choose IDL file</Typography>
+              <Typography secondary>(.JSON)</Typography>
+            </div>
             <IonIcon name="cloud-upload-outline" />
           </div>
-          <Typography>Upload</Typography>
-          <Typography secondary>Support JSON</Typography>
-        </div>
-      </label>
+        </label>
+      </div>
+      <Empty />
     </div>
   )
 }

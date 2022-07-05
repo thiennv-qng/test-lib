@@ -1,8 +1,9 @@
 import Typography from './typography'
 
-const Empty = () => {
+type EmptyProps = { className?: string }
+const Empty = ({ className }: EmptyProps) => {
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className={`flex flex-col items-center justify-center ${className}`}>
       <div className="w-[70px]">
         <svg
           className="w-[inherit] h-auto"

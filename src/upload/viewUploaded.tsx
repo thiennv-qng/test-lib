@@ -74,8 +74,7 @@ const ViewProgramAddress = () => {
   )
 }
 
-type ViewUploadedProps = { acceptViewProgramAddr?: boolean }
-const ViewUploaded = ({ acceptViewProgramAddr = false }: ViewUploadedProps) => {
+const ViewUploaded = () => {
   const { parser, removeIdl, programAddresses } = useParser()
   const { idl } = parser || {}
   const { provider: providerProgramAddr } = programAddresses
@@ -85,7 +84,6 @@ const ViewUploaded = ({ acceptViewProgramAddr = false }: ViewUploadedProps) => {
 
   const remove = () => {
     removeIdl()
-    return true
   }
 
   if (!idl) return <UploadFIle />
@@ -93,7 +91,7 @@ const ViewUploaded = ({ acceptViewProgramAddr = false }: ViewUploadedProps) => {
   return (
     <div className="flex flex-col gap-4">
       {/* Program address */}
-      {acceptViewProgramAddr && <ViewProgramAddress />}
+      <ViewProgramAddress />
       {/* File IDL name */}
       <div className="relative flex flex-nowrap justify-between gap-[6px] border border-solid border-[#B3B3B3] rounded-[8px] px-[16px] py-[10px] bg-[#0000000d] text-[16px]">
         <div className={`flex flex-row gap-2 ${clnTextColor}`}>

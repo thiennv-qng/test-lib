@@ -1,22 +1,25 @@
-import { useState, useEffect } from 'react'
+import { web3 } from '@project-serum/anchor'
+import { useState, useEffect, Fragment } from 'react'
 
 import IonIcon from '@sentre/antd-ionicon'
 import SystemAccount from './systemAccount'
-import ContextAccount from './contextAccount'
+import RecentAccount from './recentAccount'
 import IdlAccount from './idlAccount'
 import TokenAccount from './tokenAccount'
 import Pda from './pda'
 import { Modal, Input, Button, Select, Typography } from 'components'
 
-import { KeypairMeta } from 'providers/parser.provider'
+import { KeypairMeta, useParser } from 'providers/parser.provider'
 import { useSuggestAccountCategory } from 'hooks/useSuggestAccountCategory'
 import { AddressCategory } from 'types'
 
 export const SELECT_SYSTEM = [
+  AddressCategory.walletAddress,
+  AddressCategory.newKeypair,
   AddressCategory.idl,
   AddressCategory.token,
   AddressCategory.pda,
-  AddressCategory.context,
+  AddressCategory.recent,
   AddressCategory.system,
 ]
 
@@ -27,8 +30,8 @@ type ModalViewProps = {
 
 const ModalView = ({ inputType, onChange }: ModalViewProps) => {
   switch (inputType) {
-    case AddressCategory.context:
-      return <ContextAccount onChange={onChange} />
+    case AddressCategory.recent:
+      return <RecentAccount onChange={onChange} />
     case AddressCategory.idl:
       return <IdlAccount onChange={onChange} />
     case AddressCategory.system:
@@ -58,6 +61,7 @@ const PublicKeyInput = ({
   const [visible, setVisible] = useState(false)
   const [category, setCategory] = useState<AddressCategory>()
   const { findDefaultCategory } = useSuggestAccountCategory()
+  const { walletAddress } = useParser()
 
   // Select default category
   useEffect(() => {
@@ -74,10 +78,20 @@ const PublicKeyInput = ({
 
   const onSelectCategory = (category: AddressCategory) => {
     setCategory(category)
+    switch (category) {
+      case AddressCategory.walletAddress:
+        return onChange({ publicKey: walletAddress || '' })
+      case AddressCategory.newKeypair:
+        const newKeyPair = web3.Keypair.generate()
+        return onChange({
+          publicKey: newKeyPair.publicKey.toBase58(),
+          privateKey: Buffer.from(newKeyPair.secretKey).toString('hex'),
+        })
+    }
     setVisible(true)
   }
 
-  if (!category) return null
+  if (!category) return <Fragment />
 
   return (
     <div className="flex flex-col gap-[6px]">
@@ -92,8 +106,8 @@ const PublicKeyInput = ({
           onChange={(e) => onChangePublicKey({ publicKey: e.target.value })}
           bordered={false}
           suffix={
-            <Button type="text" onClick={() => setVisible(true)}>
-              <Typography level={5}>Init</Typography>
+            <Button type="text" onClick={() => setVisible(true)} disabled>
+              <Typography level={5}>auto</Typography>
             </Button>
           }
         />

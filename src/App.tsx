@@ -1,12 +1,12 @@
 import { Typography } from 'components'
-import UploadIdl from 'upload'
+import IdlParserView from 'view'
 
 const App = () => {
   return (
     <div>
       <Typography>Upload File</Typography>
       <div>
-        <UploadIdl />
+        <IdlParserView />
       </div>
     </div>
   )

@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 import { IdlTypeDefTyStruct } from '@project-serum/anchor/dist/cjs/idl'
-
-import ParamInput from '../wrapInput/index'
+import ParamInput from '../index'
 
 const StructInput = ({
   structType,
@@ -28,6 +27,7 @@ const StructInput = ({
       {structType.fields?.map(({ name, type }, idx) => {
         return (
           <ParamInput
+            name={name}
             idlType={type}
             value={structData[name] || ''}
             onChange={(data) => onChangeStruct(name, data)}

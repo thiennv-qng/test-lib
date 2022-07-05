@@ -1,8 +1,11 @@
 export enum AddressCategory {
-  context = 'Context',
+  recent = 'Recent',
   system = 'System',
   idl = 'Program Account Data',
-  token = 'Token Account',
-  pda = 'PDA',
+  token = 'PAD - Token Account',
+  pda = 'PDA - Other',
   input = 'input',
+  walletAddress = 'Wallet Address',
+  newKeypair = 'New Keypair',
+  default = 'Default',
 }

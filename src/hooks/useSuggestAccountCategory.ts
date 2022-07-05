@@ -11,7 +11,7 @@ export const useSuggestAccountCategory = () => {
     (accountName: string) => {
       if (!idl) return
       const name = accountName.toLowerCase()
-      if (['signer', 'authority'].includes(name)) return AddressCategory.context
+      if (['signer', 'authority'].includes(name)) return AddressCategory.recent
       // Check IDL accounts type
       if (idl.accounts) {
         for (const accountType of idl.accounts) {

@@ -38,10 +38,10 @@ const GenerateInstruction = () => {
 
   return (
     <div className="grid grid-cols-1 gap-10">
-      <ViewTxInstructions />
-      <Button onClick={onInit} block loading={loading} type="primary">
+      <Button onClick={onInit} loading={loading} type="primary" block>
         Generate Instruction
       </Button>
+      <ViewTxInstructions />
     </div>
   )
 }

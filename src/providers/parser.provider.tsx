@@ -48,10 +48,15 @@ export type SetArgsMetaState = {
   name: string
   val: string
 }
+export type ProgramAddress = {
+  idl?: string
+  provider: string
+  customer?: string
+}
 export type SetAccountsMetaState = { name: string; data: KeypairMeta }
 export type SetRemainingAccounts = { name: string; data: AccountMetaAddress[] }
 export type ParserProvider = {
-  programAddress?: string
+  programAddresses: ProgramAddress
   parser: IDLParserState
   setInstruction: (instruc: string) => void
   uploadIdl: (idl: Idl) => void
@@ -63,7 +68,7 @@ export type ParserProvider = {
   walletAddress?: string
   txInstructions?: Record<string, TransactionInstruction>
   setRemainingAccouts: (args: SetRemainingAccounts) => void
-  setProgramAddress: (programAddress: string) => void
+  setProgramAddress: (name: string, programAddress: string) => void
 }
 
 const DEFAULT_PARSER_IDL: IDLParserState = {
@@ -78,20 +83,21 @@ type IDLContextProviderProps = {
   children: ReactNode
   connection: string
   walletAddress?: string
-  programAddress?: string
+  programAddresses: ProgramAddress
 }
 
 const IDLParserContextProvider = ({
   children,
   connection,
   walletAddress,
-  programAddress,
+  programAddresses,
 }: IDLContextProviderProps) => {
   const [parserData, setParserData] = useState<IDLParserState>(
     DEFAULT_PARSER_IDL as IDLParserState,
   )
   const [txInstruct, setTxInstruct] = useState({})
-  const [stateProgramAddr, setStateProgramAddr] = useState(programAddress)
+  const [stateProgramAddresses, setStateProgramAddresses] =
+    useState(programAddresses)
 
   const uploadIdl = useCallback(
     (idl: Idl) => {
@@ -104,7 +110,11 @@ const IDLParserContextProvider = ({
   const removeIdl = useCallback(() => {
     setParserData(DEFAULT_PARSER_IDL)
     setTxInstruct({})
-  }, [])
+    // remove custom programAddress
+    const nextData = { ...stateProgramAddresses }
+    nextData.customer = ''
+    setStateProgramAddresses(nextData)
+  }, [stateProgramAddresses])
 
   const selectInstruction = useCallback(
     (ixName: string) => {
@@ -174,13 +184,13 @@ const IDLParserContextProvider = ({
   )
 
   const setProgramAddress = useCallback(
-    (address) => {
-      let newProgramAddr = programAddress
-      if (account.isAddress(address)) newProgramAddr = address
+    (name, address) => {
+      const nextData = { ...stateProgramAddresses }
+      if (account.isAddress(address) && !!name) nextData[name] = address
 
-      return setStateProgramAddr(newProgramAddr)
+      return setStateProgramAddresses(nextData)
     },
-    [programAddress],
+    [stateProgramAddresses],
   )
 
   const provider = useMemo(
@@ -189,7 +199,7 @@ const IDLParserContextProvider = ({
       txInstructions: txInstruct,
       connection,
       walletAddress,
-      programAddress: stateProgramAddr,
+      programAddresses: stateProgramAddresses,
       setInstruction: selectInstruction,
       uploadIdl,
       setArgsMeta,
@@ -204,7 +214,7 @@ const IDLParserContextProvider = ({
       txInstruct,
       connection,
       walletAddress,
-      stateProgramAddr,
+      stateProgramAddresses,
       selectInstruction,
       uploadIdl,
       setArgsMeta,

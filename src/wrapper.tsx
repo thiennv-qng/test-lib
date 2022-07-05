@@ -6,7 +6,9 @@ const Wrapper = () => {
     <ParserProvider
       walletAddress="BkLRcJucoTF9GnxQUa94fkqZdoL9LTWCoT5gF54zVsJk"
       connection="https://api.devnet.solana.com"
-      programAddress="Hxzy3cvdPz48RodavEN4P41TZp4g6Vd1kEMaUiZMof1u"
+      programAddresses={{
+        provider: 'Hxzy3cvdPz48RodavEN4P41TZp4g6Vd1kEMaUiZMof1u',
+      }}
     >
       <App />
     </ParserProvider>

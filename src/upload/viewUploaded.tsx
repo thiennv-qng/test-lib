@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { account } from '@senswap/sen-js'
 
 import IonIcon from '@sentre/antd-ionicon'
@@ -8,10 +8,20 @@ import { Input, Typography } from 'components'
 import { useParser } from '../providers/parser.provider'
 
 const ViewProgramAddress = () => {
-  const { programAddress, setProgramAddress } = useParser()
-  const inputRef = useRef<HTMLInputElement>(null)
+  const { programAddresses, setProgramAddress } = useParser()
+  const {
+    provider: providerProgramAddr,
+    idl: idlProgramAddr,
+    customer: customProgramAddr,
+  } = programAddresses
   const [isFocusProgramAddress, setIsFocusProgramAddress] = useState(false)
-  const [value, setValue] = useState(programAddress)
+  const [value, setValue] = useState(providerProgramAddr)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const defaultProgramAddr = useMemo(
+    () => customProgramAddr || idlProgramAddr || providerProgramAddr,
+    [customProgramAddr, idlProgramAddr, providerProgramAddr],
+  )
 
   const onFocusFieldProgramAddrr = () => {
     if (!inputRef.current) return setIsFocusProgramAddress(false)
@@ -21,13 +31,18 @@ const ViewProgramAddress = () => {
 
   const onUpdateProgrameAddress = () => {
     setIsFocusProgramAddress(false)
-    if (!account.isAddress(value)) return setValue(programAddress)
-    return setProgramAddress(value)
+    if (!account.isAddress(value)) return setValue(defaultProgramAddr)
+    return setProgramAddress('customer', value)
   }
 
   const onChange = (val: string) => {
     if (isFocusProgramAddress) return setValue(val)
   }
+
+  // set default program address
+  useEffect(() => {
+    setValue(defaultProgramAddr)
+  }, [defaultProgramAddr])
 
   return (
     <div className="flex flex-col gap-1">
@@ -61,10 +76,11 @@ const ViewProgramAddress = () => {
 
 type ViewUploadedProps = { acceptViewProgramAddr?: boolean }
 const ViewUploaded = ({ acceptViewProgramAddr = false }: ViewUploadedProps) => {
-  const { parser, removeIdl, programAddress } = useParser()
+  const { parser, removeIdl, programAddresses } = useParser()
   const { idl } = parser || {}
+  const { provider: providerProgramAddr } = programAddresses
 
-  const isEmptyProgramAddr = !programAddress
+  const isEmptyProgramAddr = !account.isAddress(providerProgramAddr)
   const clnTextColor = isEmptyProgramAddr ? 'text-[#F9575E]' : 'text-green-600'
 
   const remove = () => {

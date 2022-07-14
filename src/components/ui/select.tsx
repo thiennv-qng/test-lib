@@ -6,6 +6,8 @@ type SelectProps = {
   style?: CSSProperties
   className?: string
   children?: ReactNode
+  suffix?: ReactNode
+  extra?: ReactNode
 } & SelectHTMLAttributes<HTMLSelectElement>
 
 const Select = ({
@@ -13,17 +15,27 @@ const Select = ({
   className = '',
   style,
   children,
+  suffix,
+  extra,
   ...props
 }: SelectProps) => {
   const cln = bordered ? `border ${className} ` : className
   return (
-    <select
-      className={cln + 'rounded-[4px] px-[8px] bg-[#E0E0E0]'}
-      style={{ ...style }}
-      {...props}
+    <div
+      className={
+        cln + 'flex flex-row rounded-[4px] px-[8px] bg-[#E0E0E0] gap-2'
+      }
     >
-      {children}
-    </select>
+      {suffix}
+      <select
+        style={{ ...style }}
+        className="bg-transparent outline-none w-full"
+        {...props}
+      >
+        {children}
+      </select>
+      {extra}
+    </div>
   )
 }
 

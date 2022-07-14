@@ -1,4 +1,4 @@
-import { Idl, web3, BN } from '@project-serum/anchor'
+import { Idl, web3, BN, utils } from '@project-serum/anchor'
 import { IdlInstruction, IdlType } from '@project-serum/anchor/dist/cjs/idl'
 import { PublicKey } from '@solana/web3.js'
 import {
@@ -128,4 +128,21 @@ export const normalizeAnchorArgs = (
     return nextData
   })
   return nextInstruct
+}
+
+export const getAutocompleteSystemAccount = (accountName: string): string => {
+  const name = accountName.toLowerCase()
+  let programAddress = ''
+
+  if (name.includes('program')) {
+    if (name.includes('token') && !name.includes('associated'))
+      programAddress = utils.token.TOKEN_PROGRAM_ID.toBase58()
+    if (name.includes('system'))
+      programAddress = web3.SystemProgram.programId.toBase58()
+    if (name.includes('associated'))
+      programAddress = utils.token.ASSOCIATED_PROGRAM_ID.toBase58()
+  }
+
+  if (name.includes('rent')) programAddress = web3.SYSVAR_RENT_PUBKEY.toBase58()
+  return programAddress
 }

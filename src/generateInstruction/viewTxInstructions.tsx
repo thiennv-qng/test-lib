@@ -32,7 +32,6 @@ const ViewTxInstructions = () => {
       if (!!instruction)
         setTxInstructions({ name: ixSelected, data: instruction })
     } catch (err) {
-      console.log(err)
       setTxInstructions()
     } finally {
       setLoading(false)

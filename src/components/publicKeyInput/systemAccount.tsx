@@ -3,11 +3,12 @@ import { account } from '@senswap/sen-js'
 import { KeypairMeta, useParser } from 'providers/parser.provider'
 import Button from '../ui/button'
 
-const SYSTEM_ACCOUNTS = [
+export const SYSTEM_ACCOUNTS = [
   { name: 'systemProgram', value: web3.SystemProgram.programId },
   { name: 'rent', value: web3.SYSVAR_RENT_PUBKEY },
   { name: 'tokenProgram', value: utils.token.TOKEN_PROGRAM_ID },
   { name: 'associatedTokenProgram', value: utils.token.ASSOCIATED_PROGRAM_ID },
+  { name: 'sysvarClockProgram', value: web3.SYSVAR_CLOCK_PUBKEY },
 ]
 
 const SystemAccount = ({

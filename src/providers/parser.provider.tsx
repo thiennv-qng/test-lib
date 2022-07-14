@@ -150,12 +150,15 @@ const IDLParserContextProvider = ({
 
   const setAccountsMeta = useCallback(
     (args: SetAccountsMetaState | undefined) => {
-      const nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
+      const nextData: IDLParserState = { ...parserData }
+
       if (!!args) {
         const { name, data } = args
-        nextData.accountsMetas = { ...nextData.accountsMetas, [name]: data }
+        nextData.accountsMetas = Object.assign(nextData.accountsMetas, {
+          [name]: data,
+        })
       }
-      return setParserData({ ...nextData })
+      return setParserData(nextData)
     },
     [parserData],
   )

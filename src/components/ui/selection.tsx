@@ -67,7 +67,7 @@ const Selection = ({
     <div className="relative flex w-full" style={style}>
       {/* Show selected */}
       <div
-        className={`flex justify-between overflow-hidden w-full p-2 cursor-pointer select-none gap-2 ${clnBorder} ${clnDroped}`}
+        className={`flex justify-between items-center overflow-hidden w-full p-2 cursor-pointer select-none gap-2 ${clnBorder} ${clnDroped}`}
         onClick={() => setVisible(!visible)}
         ref={wrapperRef}
       >

@@ -111,3 +111,9 @@ button.btn-sen-parser * {
   text-overflow: ellipsis;
   word-break: keep-all;
 }
+
+/* Ionicon */
+.anticon {
+  /* Fit icon height to align */
+  display: flex;
+}

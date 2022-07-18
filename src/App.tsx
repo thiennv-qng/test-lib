@@ -5,6 +5,7 @@ const App = () => {
   return (
     <div>
       <Typography>Upload File</Typography>
+
       <div>
         <IdlParserView />
       </div>

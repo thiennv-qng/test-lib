@@ -44,7 +44,6 @@ export type IDLParserState = {
   remainingAccounts: Record<string, AccountMetaAddress[]>
 }
 export type SetArgsMetaState = {
-  instructName: string
   name: string
   val: string
 }
@@ -135,12 +134,15 @@ const IDLParserContextProvider = ({
   const setArgsMeta = useCallback(
     (args: SetArgsMetaState | undefined) => {
       let nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
-      if (!!args && !!args.instructName) {
-        const { instructName, name, val } = args
+      if (!!args && !!nextData.ixSelected) {
+        const { name, val } = args
         const argsData = nextData.argsMetas
         nextData.argsMetas = {
           ...argsData,
-          [instructName]: { ...argsData[instructName], [name]: val },
+          [nextData.ixSelected]: {
+            ...argsData[nextData.ixSelected],
+            [name]: val,
+          },
         }
       }
       return setParserData({ ...nextData })

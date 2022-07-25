@@ -4,7 +4,7 @@ import { account } from '@senswap/sen-js'
 
 import PublicKeyInput from './index'
 import Button from '../ui/button'
-import { KeypairMeta } from 'providers/parser.provider'
+import { KeypairMeta, useParser } from 'providers/parser.provider'
 import Typography from 'components/ui/typography'
 
 const TokenAccount = ({
@@ -15,6 +15,7 @@ const TokenAccount = ({
   const [mint, setMint] = useState('')
   const [owner, setOwner] = useState('')
   const [tokenAccount, setTokenAccount] = useState('')
+  const { setRecents } = useParser()
 
   const validConfirm = !!account.isAddress(mint) && !!account.isAddress(owner)
 
@@ -43,12 +44,18 @@ const TokenAccount = ({
         <PublicKeyInput
           accountName="Mint"
           value={mint}
-          onChange={(e) => setMint(e.publicKey)}
+          onChange={(e) => {
+            setMint(e.publicKey)
+            setRecents({ name: 'mints', value: e.publicKey })
+          }}
         />
         <PublicKeyInput
           accountName="Owner"
           value={owner}
-          onChange={(e) => setOwner(e.publicKey)}
+          onChange={(e) => {
+            setOwner(e.publicKey)
+            setRecents({ name: 'owner', value: e.publicKey })
+          }}
         />
       </div>
       <div className="grid grid-cols-1 gap-6">

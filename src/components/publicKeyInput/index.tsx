@@ -21,7 +21,7 @@ export const SELECT_SYSTEM = [
   AddressCategory.idl,
   AddressCategory.token,
   AddressCategory.pda,
-  AddressCategory.recent,
+  AddressCategory.recents,
   AddressCategory.system,
 ]
 
@@ -32,7 +32,7 @@ type ModalViewProps = {
 
 const ModalView = ({ inputType, onChange }: ModalViewProps) => {
   switch (inputType) {
-    case AddressCategory.recent:
+    case AddressCategory.recents:
       return <RecentAccount onChange={onChange} />
     case AddressCategory.idl:
       return <IdlAccount onChange={onChange} />

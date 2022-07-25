@@ -1,5 +1,12 @@
 import IonIcon from '@sentre/antd-ionicon'
-import { CSSProperties, ReactNode, useEffect, useRef, useState } from 'react'
+import {
+  CSSProperties,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import Typography from './typography'
 
@@ -36,7 +43,6 @@ const Selection = ({
   const clnBorder = bordered
     ? 'border border-inherit'
     : 'border-none bg-[#E0E0E0]'
-  const hidden = !visible ? 'hidden' : ''
   const clnDroped = visible ? 'rounded-t-md' : 'rounded-md'
 
   const onClick = (val: string) => {
@@ -49,6 +55,15 @@ const Selection = ({
       throw new Error(`Node expected`)
     }
   }
+
+  const sortedOptions = useMemo(() => {
+    if (selected !== DEFAULT_SELECTED)
+      options.sort((a, b) => {
+        if (a.value === selected) return -1
+        return 1
+      })
+    return options
+  }, [options, selected])
 
   useEffect(() => {
     const ctxOption = optionRef.current
@@ -77,25 +92,27 @@ const Selection = ({
         <div>{prefix}</div>
       </div>
       {/* Options */}
-      <div
-        className={`absolute w-full top-[100%] bg-[#fff] shadow-[0_5px_8px_#0000002e] max-h-[160px] overflow-auto rounded-b-md ${hidden} z-[999999]`}
-        style={bodyStyle}
-        ref={optionRef}
-      >
-        {options.map((option, idx) => (
-          <div
-            className={`w-full p-2 cursor-pointer select-none last:rounded-b-md hover:bg-[#f5f5f5] hover:text-black overflow-hidden ${
-              selected === option.value ? 'bg-[#605ece] text-white' : ''
-            }`}
-            key={idx}
-            onClick={() => onClick(option.value)}
-          >
-            <Typography style={{ whiteSpace: 'nowrap' }}>
-              {option.label}
-            </Typography>
-          </div>
-        ))}
-      </div>
+      {visible && (
+        <div
+          className={`absolute w-full top-[100%] bg-[#fff] shadow-[0_5px_8px_#0000002e] max-h-[160px] overflow-auto rounded-b-md z-[999999]`}
+          style={bodyStyle}
+          ref={optionRef}
+        >
+          {sortedOptions.map((option, idx) => (
+            <div
+              className={`w-full p-2 cursor-pointer select-none last:rounded-b-md hover:bg-[#f5f5f5] hover:text-black overflow-hidden ${
+                selected === option.value ? 'bg-[#605ece] text-white' : ''
+              }`}
+              key={idx}
+              onClick={() => onClick(option.value)}
+            >
+              <Typography style={{ whiteSpace: 'nowrap' }}>
+                {option.label}
+              </Typography>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

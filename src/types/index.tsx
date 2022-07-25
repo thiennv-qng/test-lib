@@ -1,5 +1,5 @@
 export enum AddressCategory {
-  recent = 'Recent',
+  recents = 'Recents',
   system = 'System',
   idl = 'Program Account Data',
   token = 'PAD - Token Account',

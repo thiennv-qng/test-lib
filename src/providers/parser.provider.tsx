@@ -22,6 +22,7 @@ export type SetExportTxInstruction = {
   name: string
   data: TransactionInstruction
 }
+export type SetRecents = { name: string; value: string }
 
 export type AccountMetaAddress = {
   isSigner: boolean
@@ -42,6 +43,7 @@ export type IDLParserState = {
   argsMetas: ArgsMetaState
   accountsMetas: AccountMetaState
   remainingAccounts: Record<string, AccountMetaAddress[]>
+  recents: Record<string, string | string[]>
 }
 export type SetArgsMetaState = {
   name: string
@@ -68,6 +70,7 @@ export type ParserProvider = {
   txInstructions?: Record<string, TransactionInstruction>
   setRemainingAccouts: (args: SetRemainingAccounts) => void
   setProgramAddress: (name: string, programAddress: string) => void
+  setRecents: (args: SetRecents) => void
 }
 
 const DEFAULT_PARSER_IDL: IDLParserState = {
@@ -76,6 +79,7 @@ const DEFAULT_PARSER_IDL: IDLParserState = {
   argsMetas: {},
   accountsMetas: {},
   remainingAccounts: {},
+  recents: {},
 }
 
 type IDLContextProviderProps = {
@@ -133,17 +137,16 @@ const IDLParserContextProvider = ({
 
   const setArgsMeta = useCallback(
     (args: SetArgsMetaState | undefined) => {
-      let nextData: IDLParserState = JSON.parse(JSON.stringify(parserData))
+      let nextData = { ...parserData }
       if (!!args && !!nextData.ixSelected) {
         const { name, val } = args
         const argsData = nextData.argsMetas
-        nextData.argsMetas = {
-          ...argsData,
+        nextData.argsMetas = Object.assign(argsData, {
           [nextData.ixSelected]: {
             ...argsData[nextData.ixSelected],
             [name]: val,
           },
-        }
+        })
       }
       return setParserData({ ...nextData })
     },
@@ -152,7 +155,7 @@ const IDLParserContextProvider = ({
 
   const setAccountsMeta = useCallback(
     (args: SetAccountsMetaState | undefined) => {
-      const nextData: IDLParserState = { ...parserData }
+      const nextData = { ...parserData }
 
       if (!!args) {
         const { name, data } = args
@@ -199,6 +202,37 @@ const IDLParserContextProvider = ({
     [stateProgramAddresses],
   )
 
+  const setRecents = useCallback(
+    (args: SetRecents) => {
+      const nextData = { ...parserData }
+
+      if (!args) nextData.recents = {}
+      if (
+        !args.name ||
+        !args.value ||
+        nextData.recents[args.name] === args.value
+      )
+        return
+      const { name, value } = args
+      if (args.name.startsWith('Seed')) return
+      if (args.name.endsWith('s') || args.name.endsWith('es'))
+        nextData.recents = Object.assign(nextData.recents, {
+          [name]: [
+            ...(nextData.recents[name] || []),
+            value,
+            ...value.split(','),
+          ],
+        })
+      else
+        nextData.recents = Object.assign(nextData.recents, {
+          [name]: value,
+        })
+
+      return setParserData(nextData)
+    },
+    [parserData],
+  )
+
   const provider = useMemo(
     () => ({
       parser: parserData,
@@ -214,6 +248,7 @@ const IDLParserContextProvider = ({
       setTxInstructions,
       setRemainingAccouts,
       setProgramAddress,
+      setRecents,
     }),
     [
       parserData,
@@ -229,6 +264,7 @@ const IDLParserContextProvider = ({
       setTxInstructions,
       setRemainingAccouts,
       setProgramAddress,
+      setRecents,
     ],
   )
 

@@ -145,9 +145,12 @@ const PublicKeyInput = ({
         closeIcon={<IonIcon name="close-outline" />}
       >
         <div className="flex flex-col gap-10">
-          <Typography level={5} className="capitalize font-bold">
-            {accountName}
-          </Typography>
+          <div className="flex flex-nowrap gap-2">
+            <Typography level={5} className="capitalize font-bold">
+              {category}
+            </Typography>
+            <Typography>({accountName})</Typography>
+          </div>
           <ModalView inputType={category} onChange={onChangePublicKey} />
         </div>
       </Modal>

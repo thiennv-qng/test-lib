@@ -13,7 +13,7 @@ export type Option = { label: string; value: string }
 type SelectionProps = {
   options: Option[]
   onSelected?: (selected: string) => void
-  selected?: ReactNode | string
+  selected?: string
   bordered?: boolean
   prefix?: ReactNode
   style?: CSSProperties

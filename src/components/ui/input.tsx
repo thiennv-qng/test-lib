@@ -35,7 +35,7 @@ const Input = forwardRef(
       ? 'border border-inherit'
       : 'border-none bg-[#E0E0E0]'
     const cln =
-      'flex flex-nowrap justify-between gap-2 rounded-[4px] py-[6px] px-[14px]'
+      'flex flex-nowrap justify-between items-center gap-2 rounded-[4px] py-[6px] px-[14px]'
 
     return (
       <div className={`${cln} ${className} ${clnBorder}`} style={{ ...style }}>

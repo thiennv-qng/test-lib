@@ -67,7 +67,7 @@ const PublicKeyInput = ({
   const [category, setCategory] = useState<AddressCategory>()
   const { findDefaultCategory } = useSuggestAccountCategory()
   const { walletAddress } = useParser()
-  const { autoAccount, loading } = useSuggestProgramAccounts()
+  const { autoAccount, loading } = useSuggestProgramAccounts(accountName)
 
   const onChangePublicKey = useCallback(
     (keypair: KeypairMeta) => {
@@ -121,11 +121,7 @@ const PublicKeyInput = ({
           onBlur={(e) => onBlur(e.target.value)}
           bordered={false}
           suffix={
-            <Button
-              type="text"
-              onClick={() => autoAccount(accountName)}
-              loading={loading}
-            >
+            <Button type="text" onClick={() => autoAccount()} loading={loading}>
               <Typography level={5}>auto</Typography>
             </Button>
           }

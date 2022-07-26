@@ -37,7 +37,6 @@ const Selection = ({
   style,
 }: SelectionProps) => {
   const [visible, setVisible] = useState(false)
-  const optionRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   const clnBorder = bordered
@@ -66,25 +65,21 @@ const Selection = ({
   }, [options, selected])
 
   useEffect(() => {
-    const ctxOption = optionRef.current
     const ctxWrapper = wrapperRef.current
-    if (!ctxWrapper || !ctxOption) return
+    if (!ctxWrapper) return
     document.addEventListener('click', ({ target }) => {
       assertIsNode(target)
-      if (!ctxOption.contains(target) && !ctxWrapper.contains(target)) {
-        setVisible(false)
-      }
+      if (!ctxWrapper.contains(target)) setVisible(false)
     })
     return () => document.removeEventListener('click', () => {})
   }, [])
 
   return (
-    <div className="relative flex w-full" style={style}>
+    <div className="relative flex w-full" style={style} ref={wrapperRef}>
       {/* Show selected */}
       <div
         className={`flex justify-between items-center overflow-hidden w-full p-2 cursor-pointer select-none gap-2 ${clnBorder} ${clnDroped}`}
         onClick={() => setVisible(!visible)}
-        ref={wrapperRef}
       >
         <div className="max-w-[90%] whitespace-nowrap overflow-hidden">
           {selected}
@@ -96,7 +91,6 @@ const Selection = ({
         <div
           className={`absolute w-full top-[100%] bg-[#fff] shadow-[0_5px_8px_#0000002e] max-h-[160px] overflow-auto rounded-b-md z-[999999]`}
           style={bodyStyle}
-          ref={optionRef}
         >
           {sortedOptions.map((option, idx) => (
             <div

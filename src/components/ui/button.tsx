@@ -27,7 +27,7 @@ const BUTTON_TYPE: Record<ButtonTypes, CSSProperties> = {
 export const Spinner = ({ size = 24, className }: Partial<ButtonProps>) => {
   return (
     <div
-      style={{ width: size, height: size, stroke: '#cbd5e1' }}
+      style={{ width: size, height: size, stroke: 'inherit' }}
       className={className}
     >
       <svg className="spinner" viewBox="0 0 50 50">
@@ -60,7 +60,7 @@ const Button = ({
   const disabledBtn = loading || disabled
   const width = block ? { width: '100%' } : {}
   const btnStyle = { ...BUTTON_TYPE[type], ...width, ...style }
-  const btnCln = `${className} btn-sen-parser flex flex-row justify-center items-center gap-2 py-2 px-4 rounded-[4px] font-medium border border-[#B3B3B3] ${
+  const btnCln = `${className} btn-sen-parser flex flex-row justify-center items-center gap-2 py-2 px-4 rounded-[4px] font-medium border border-[#B3B3B3] stroke-slate-800 ${
     type === 'primary' ? 'bg-[#5D6CCF] !text-white border-transparent' : ''
   } `
 

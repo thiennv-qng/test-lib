@@ -77,6 +77,7 @@ export const useSuggestProgramAccounts = (accountName: string) => {
         return explorer.fetchTransactions(explorerAddress.toBase58(), {})
       },
     )
+    console.log('transLogs', transLogs)
 
     const ixLogs: IxLog[] = []
     for (const transLog of transLogs) {
@@ -127,6 +128,7 @@ export const useSuggestProgramAccounts = (accountName: string) => {
       const accountTracking = trackings[accountIndex]
       const currentAccounts = getCurrentAccounts()
 
+      console.log('trackings', trackings)
       for (let i = 0; i < trackings.length; i++) {
         const tracking = trackings[i]
         if (tracking.total !== accountTracking.total) continue
@@ -135,6 +137,7 @@ export const useSuggestProgramAccounts = (accountName: string) => {
         return onChangeAccount(accountName, trackings[accountIndex].addrs[idx])
       }
     } catch (error) {
+      console.log('error', error)
     } finally {
       setLoading(false)
     }

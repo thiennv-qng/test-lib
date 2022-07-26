@@ -14,6 +14,7 @@ import { useSuggestAccountCategory } from 'hooks/useSuggestAccountCategory'
 import { AddressCategory } from 'types'
 import { getAutocompleteSystemAccount } from 'helpers'
 import Selection from 'components/ui/selection'
+import { useSuggestProgramAccounts } from 'hooks/useSuggestProgramAccounts'
 
 export const SELECT_SYSTEM = [
   AddressCategory.walletAddress,
@@ -64,6 +65,7 @@ const PublicKeyInput = ({
   const [category, setCategory] = useState<AddressCategory>()
   const { findDefaultCategory } = useSuggestAccountCategory()
   const { walletAddress } = useParser()
+  const { autoAccount } = useSuggestProgramAccounts()
 
   const onChangePublicKey = useCallback(
     (keypair: KeypairMeta) => {
@@ -116,7 +118,7 @@ const PublicKeyInput = ({
           onChange={(e) => onChangePublicKey({ publicKey: e.target.value })}
           bordered={false}
           suffix={
-            <Button type="text" onClick={() => setVisible(true)} disabled>
+            <Button type="text" onClick={() => autoAccount(accountName)}>
               <Typography level={5}>auto</Typography>
             </Button>
           }

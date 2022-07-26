@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { web3 } from '@project-serum/anchor'
 import { account } from '@senswap/sen-js'
 
@@ -7,22 +7,14 @@ import PubicKeyInput from './index'
 import Input from 'components/ui/input'
 
 import { KeypairMeta, useParser } from 'providers/parser.provider'
+import { useProgramAddress } from 'hooks/useProgramAddress'
 
 const Pda = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
   const [seeds, setSeeds] = useState<string[]>([''])
   const [programAddress, setProgramAddress] = useState('')
   const [pdaAddress, setPdaAddress] = useState('')
-  const { programAddresses, setRecents } = useParser()
-  const {
-    customer: customProgramAddr,
-    idl: idlProgramAddr,
-    provider: providerProgramAddr,
-  } = programAddresses
-
-  const systemProgramAddr = useMemo(
-    () => customProgramAddr || idlProgramAddr || providerProgramAddr,
-    [customProgramAddr, idlProgramAddr, providerProgramAddr],
-  )
+  const { setRecents } = useParser()
+  const systemProgramAddr = useProgramAddress()
 
   const onAdd = () => {
     const newSeed = [...seeds]

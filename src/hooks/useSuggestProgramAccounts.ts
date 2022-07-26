@@ -7,7 +7,7 @@ import {
 } from '@sen-use/web3'
 import { useIdlInstruction } from 'hooks/useIdlInstruction'
 import { useParser } from 'providers/parser.provider'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useOnChangeProvider } from './useOnChangeProvider'
 import { useProgramAddress } from './useProgramAddress'
 
@@ -27,7 +27,7 @@ export const useSuggestProgramAccounts = () => {
   const programAddr = useProgramAddress()
   const { onChangeAccount } = useOnChangeProvider()
 
-  const currentAccounts = useMemo(() => {
+  const getCurrentAccounts = useCallback(() => {
     const accounts: string[] = []
     for (const acc of ixIdl.accounts) {
       let accountAddr = accountsMetas[acc.name]
@@ -42,6 +42,7 @@ export const useSuggestProgramAccounts = () => {
 
   const getExplorerAddress = useCallback(async () => {
     const pubKeys: web3.PublicKey[] = []
+    const currentAccounts = getCurrentAccounts()
     for (const addr of currentAccounts)
       if (addr) pubKeys.push(new web3.PublicKey(addr))
 
@@ -54,7 +55,7 @@ export const useSuggestProgramAccounts = () => {
         return data.publicKey
       }
     }
-  }, [connection, currentAccounts, programAddr])
+  }, [connection, getCurrentAccounts, programAddr])
 
   const fetchIxLogs = useCallback(async () => {
     const explorerAddress = await getExplorerAddress()
@@ -109,7 +110,8 @@ export const useSuggestProgramAccounts = () => {
           break
         }
         const logPoint = points[accountIndex]
-        if (!logPoint || logPoint.total > 1) return
+        console.log('logPoint', logPoint)
+        if (!logPoint) return
 
         onChangeAccount(accountName, points[accountIndex].addrs[0])
       } catch (error) {

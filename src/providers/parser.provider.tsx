@@ -215,15 +215,15 @@ const IDLParserContextProvider = ({
         return
       const { name, value } = args
       if (args.name.startsWith('Seed')) return
-      if (args.name.endsWith('s') || args.name.endsWith('es'))
+      if (args.name.endsWith('s') || args.name.endsWith('es')) {
+        // detect array string to additional value and strim value to recent
+        const nextRecent = value.includes(',')
+          ? [value, ...value.split(',')]
+          : [value]
         nextData.recents = Object.assign(nextData.recents, {
-          [name]: [
-            ...(nextData.recents[name] || []),
-            value,
-            ...value.split(','),
-          ],
+          [name]: [...(nextData.recents[name] || []), ...nextRecent],
         })
-      else
+      } else
         nextData.recents = Object.assign(nextData.recents, {
           [name]: value,
         })

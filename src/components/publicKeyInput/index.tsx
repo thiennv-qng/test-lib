@@ -52,6 +52,7 @@ type PubicKeyInputProps = {
   placeholder?: string
   onChange: (value: KeypairMeta) => void
   onRemove?: () => void
+  onBlur?: (val: string) => void
 }
 
 const PublicKeyInput = ({
@@ -60,6 +61,7 @@ const PublicKeyInput = ({
   placeholder = '',
   onChange,
   onRemove,
+  onBlur = () => {},
 }: PubicKeyInputProps) => {
   const [visible, setVisible] = useState(false)
   const [category, setCategory] = useState<AddressCategory>()
@@ -116,6 +118,7 @@ const PublicKeyInput = ({
           value={value}
           placeholder={placeholder}
           onChange={(e) => onChangePublicKey({ publicKey: e.target.value })}
+          onBlur={(e) => onBlur(e.target.value)}
           bordered={false}
           suffix={
             <Button type="text" onClick={() => autoAccount(accountName)}>

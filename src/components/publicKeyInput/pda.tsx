@@ -9,6 +9,8 @@ import Input from 'components/ui/input'
 import { KeypairMeta, useParser } from 'providers/parser.provider'
 import { useProgramAddress } from 'hooks/useProgramAddress'
 
+const RECENT_PDA_OTHER = 'PDA-others'
+
 const Pda = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
   const [seeds, setSeeds] = useState<string[]>([''])
   const [programAddress, setProgramAddress] = useState('')
@@ -31,7 +33,6 @@ const Pda = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
     const newSeed = [...seeds]
     newSeed[idx] = val
     setSeeds(newSeed)
-    setRecents({ name: 'PDA-others', value: val })
   }
 
   const deriveNewPDAAddress = useCallback(async () => {
@@ -46,6 +47,16 @@ const Pda = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
     )
     setPdaAddress(pdaAddress.toBase58())
   }, [programAddress, seeds])
+
+  const onDone = useCallback(() => {
+    if (!account.isAddress(pdaAddress)) return
+    onChange({ publicKey: pdaAddress })
+    for (const seed of seeds) {
+      if (!seed) continue
+      console.log(seed, 'seed')
+      setRecents({ name: RECENT_PDA_OTHER, value: seed })
+    }
+  }, [onChange, pdaAddress, seeds, setRecents])
 
   useEffect(() => {
     deriveNewPDAAddress()
@@ -96,12 +107,7 @@ const Pda = ({ onChange }: { onChange: (val: KeypairMeta) => void }) => {
           </div>
         )}
         {!!seeds.length && (
-          <Button
-            type="primary"
-            onClick={() => onChange({ publicKey: pdaAddress })}
-            disabled={!pdaAddress}
-            block
-          >
+          <Button type="primary" onClick={onDone} disabled={!pdaAddress} block>
             Done
           </Button>
         )}

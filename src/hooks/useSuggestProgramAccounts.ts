@@ -1,5 +1,6 @@
 import { web3 } from '@project-serum/anchor'
 import {
+  DataLoader,
   decodeIxData,
   getMultipleAccounts,
   ixDiscriminator,
@@ -51,10 +52,13 @@ export const useSuggestProgramAccounts = (accountName: string) => {
     for (const addr of currentAccounts)
       if (addr) pubKeys.push(new web3.PublicKey(addr))
 
-    const accountDatas = await getMultipleAccounts(
-      new web3.Connection(connection),
-      pubKeys,
+    const accountDatas = await DataLoader.load(
+      `getExplorerAddress:${JSON.stringify(currentAccounts)}`,
+      () => {
+        return getMultipleAccounts(new web3.Connection(connection), pubKeys)
+      },
     )
+
     for (const data of accountDatas) {
       if (data?.account.owner.toBase58() === programAddr) {
         return data.publicKey
@@ -65,11 +69,15 @@ export const useSuggestProgramAccounts = (accountName: string) => {
   const fetchIxLogs = useCallback(async () => {
     const explorerAddress = await getExplorerAddress()
     if (!explorerAddress) return []
-    const explorer = new SolanaExplorer(new web3.Connection(connection))
-    const transLogs = await explorer.fetchTransactions(
-      explorerAddress.toBase58(),
-      {},
+
+    const transLogs = await DataLoader.load(
+      `fetchIxLogs:${explorerAddress}`,
+      () => {
+        const explorer = new SolanaExplorer(new web3.Connection(connection))
+        return explorer.fetchTransactions(explorerAddress.toBase58(), {})
+      },
     )
+
     const ixLogs: IxLog[] = []
     for (const transLog of transLogs) {
       const instructions = transLog.transaction.message.instructions
